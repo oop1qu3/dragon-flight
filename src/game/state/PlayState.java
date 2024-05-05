@@ -12,8 +12,7 @@ public class PlayState {
 	public PlayState() {
 
 		this.player = new Player();
-		System.out.println("test4");
-
+		
 	}
 
 	public void loop() {
