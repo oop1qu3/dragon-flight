@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 
 public class Loader {
 	
+	// FIXME: ArrayList를 이용하여 일괄처리
 	public static void load() {
 		try {
 			Resource.backgroundMap = ImageIO.read(new File("image/backgroundMap.png"));

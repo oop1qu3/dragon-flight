@@ -10,37 +10,29 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Player extends Rectangle {
+public class Player extends Rectangle { // FIXME: Entity 추상 클래스를 상속받도록 변경
 
-	protected boolean up;
-	protected boolean down;
-	protected boolean left;
-	protected boolean right;
+	private boolean left;
+	private boolean right;
 
-	protected int speed;
+	private int speed;
 
 	public Player() {
-
-		super((WindowManager.WIDTH) / 2 - 40, 450, 80, 80);
+		super((WindowManager.WIDTH) / 2 - 40, 450, 80, 80); // FIXME: 상수 이용(80 <- SIZE 등)
 		this.speed = 10;
-
 	}
 
 	public void move() {
-
 		if (left) {
 			x -= this.speed;
 		}
 		if (right) {
 			x += this.speed;
 		}
-
 	}
 
 	public void render(Graphics graphics) {
-
 		graphics.drawImage(Resource.player, x, y, width, height, null);
-
 	}
 
 }

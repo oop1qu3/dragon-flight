@@ -17,10 +17,10 @@ public class WindowManager {
 	public WindowManager() {
 		this.frame = new JFrame("Dragon Flight");
 		this.frame.setSize(WIDTH, HEIGHT);
-		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x버튼으로 창을 끌 때 JVM 같이 종료하기
+		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		this.frame.setResizable(false);
-		this.frame.setLocationRelativeTo(null); // JFrame 중앙에 배치하기
+		this.frame.setLocationRelativeTo(null);
 	}
 	
 	public void addPanel(JPanel panel) {
@@ -44,4 +44,5 @@ public class WindowManager {
 		this.frame.pack();
 		this.frame.setVisible(true);
 	}
+	
 }

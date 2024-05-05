@@ -12,10 +12,10 @@ import javax.swing.Timer;
 import game.state.PlayState;
 
 public class Engine {
-
-	private static PlayState playState;
+	
+	private static PlayState playState; // FIXME: 여러 개의 state를 관리하는 gameStateManager 선언
 	private static WindowManager windowManager;
-	private static Timer timer;
+	private static Timer timer; // FIXME: Timer 대신 ScheduledThreadExecutor 사용
 
 	public static void init() {
 		// gameStateManager = new GameStateManager();
@@ -53,6 +53,7 @@ public class Engine {
 			playState.render(g);
 			repaint();
 		}
+		
 	}
 
 	private static class Keyboard implements KeyListener {
