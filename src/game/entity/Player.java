@@ -12,13 +12,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Player extends Entity {
-
-	private static final int SIZE = 80;
 	
 	private int speed;
 
 	public Player() {
-		super((WindowManager.WIDTH - SIZE) / 2, WindowManager.HEIGHT - 100, SIZE, SIZE); // FIXME
+		super((WindowManager.WIDTH - 80) / 2, WindowManager.HEIGHT - 100, 80, 80); // FIXME
 		this.speed = 10;
 	}
 

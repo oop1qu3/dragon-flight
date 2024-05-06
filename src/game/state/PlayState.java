@@ -11,8 +11,8 @@ public class PlayState extends GameState {
 
 	private Player player;
 
-	public PlayState(GameStateManager gsm) {
-		super(gsm);
+	public PlayState() {
+		super();
 		player = new Player();
 	}
 

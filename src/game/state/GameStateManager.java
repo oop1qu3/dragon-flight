@@ -13,7 +13,7 @@ public class GameStateManager {
 	public GameStateManager() {
 		states = new ArrayList<GameState>();
 		
-		states.add(new PlayState(this));
+		states.add(new PlayState());
 	}
 	
 	public void update() {
