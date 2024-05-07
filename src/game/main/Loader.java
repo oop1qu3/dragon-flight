@@ -12,6 +12,7 @@ public class Loader {
 		try {
 			Resource.backgroundMap = ImageIO.read(new File("image/backgroundMap.png"));
 			Resource.player = ImageIO.read(new File("image/player.png"));
+			Resource.enemy = ImageIO.read(new File("image/enemy_01.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

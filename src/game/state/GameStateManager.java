@@ -14,6 +14,7 @@ public class GameStateManager {
 		states = new ArrayList<GameState>();
 		
 		states.add(new PlayState());
+        states.add(new EnemyState());
 	}
 	
 	public void update() {
