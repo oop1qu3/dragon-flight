@@ -29,7 +29,7 @@ public class Engine {
 		key = new KeyHandler();
 		mouse = new MouseHandler();
 		
-		timer = new Timer(20, new MainGameUpdate());
+		timer = new Timer(20, new MainGameUpdate());		// 20ms마다 메인게임 update 돌리기
 	}
 
 	public static void start() {

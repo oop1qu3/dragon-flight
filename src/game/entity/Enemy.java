@@ -13,21 +13,14 @@ public class Enemy extends Entity {
     private int speed;
 
     public Enemy() {
-        super(50, 0, 80, 80);
-        this.speed = 10;
+        super(10, 0, 60, 60);
+        this.speed = 5;
     }
 
-    public void move() {
+   public void move() {
+        y += this.speed;
 
-        if (left) {
-            x -= this.speed;
-        }
-        if (right) {
-            x += this.speed;
-        }
-
-    }
-
+   }
 
     public void render(Graphics g) {
         g.drawImage(Resource.enemy, x, y, width, height, null);

@@ -11,10 +11,10 @@ public class GameStateManager {
 	private ArrayList<GameState> states;
 	
 	public GameStateManager() {
-		states = new ArrayList<GameState>();
+		states = new ArrayList<GameState>();    // state 리스트 객체생성
 		
-		states.add(new PlayState());
-        states.add(new EnemyState());
+		states.add(new PlayState());    // player state 객체를 리스트에 추가
+        states.add(new EnemyState());   // enemy state 객체를 리스트에 추가
 	}
 	
 	public void update() {
