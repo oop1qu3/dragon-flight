@@ -1,6 +1,6 @@
 package game.state;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import game.entity.Player;
 import game.map.Background;
@@ -34,7 +34,7 @@ public class PlayState extends GameState {
 	}
 	
 	@Override
-	public void render(Graphics g) {
+	public void render(Graphics2D g) {
 		background.render(g);
 		player.render(g);
 		// TODO enemy.render(g);

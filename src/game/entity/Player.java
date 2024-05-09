@@ -1,9 +1,9 @@
 package game.entity;
 
-import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
 import game.main.Resource;
-import game.main.WindowManager;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
 
@@ -12,7 +12,7 @@ public class Player extends Entity {
 	private int speed;
 
 	public Player() {
-		super((WindowManager.WIDTH - 80) / 2, WindowManager.HEIGHT - 100, 80, 80); // FIXME
+		super((384 - 80) / 2, 512 - 100, 80, 80); // FIXME 상수 선언
 		this.speed = 10;
 	}
 
@@ -35,7 +35,7 @@ public class Player extends Entity {
 		} else {
 			left = false;
 		}
-		if(key.right.pressed && centerX < WindowManager.WIDTH) {
+		if(key.right.pressed && centerX < 384) { // FIXME 상수 선언
 			right = true;
 		} else {
 			right = false;
@@ -43,7 +43,7 @@ public class Player extends Entity {
 
 	}
 
-	public void render(Graphics g) {
+	public void render(Graphics2D g) {
 		g.drawImage(Resource.player, x, y, width, height, null);
 	}
 

@@ -1,6 +1,6 @@
 package game.state;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import game.util.KeyHandler;
@@ -12,6 +12,8 @@ public class GameStateManager {
 	
 	public GameStateManager() {
 		states = new ArrayList<GameState>();
+		
+		states.add(new PlayState());
 	}
 	
 	public void start() {
@@ -34,7 +36,7 @@ public class GameStateManager {
         }     
 	}
 	
-	public void render(Graphics g) {
+	public void render(Graphics2D g) {
         for (int i = 0; i < states.size(); i++) {
             if (states.get(i) != null) {
                 states.get(i).render(g);

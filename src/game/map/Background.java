@@ -1,6 +1,6 @@
 package game.map;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import game.main.Resource;
 
@@ -20,7 +20,7 @@ public class Background {
 		y = y % height;
 	}
 
-	public void render(Graphics g) {
+	public void render(Graphics2D g) {
 		g.drawImage(Resource.backgroundMap, 0, y, width, height, null);
 		g.drawImage(Resource.backgroundMap, 0, -height + y, width, height, null);
 	}
