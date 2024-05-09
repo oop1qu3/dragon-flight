@@ -6,11 +6,7 @@ import game.main.Resource;
 import game.main.WindowManager;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 public class Player extends Entity {
 	
 	private int speed;
@@ -33,8 +29,17 @@ public class Player extends Entity {
 
 	public void input(KeyHandler key, MouseHandler mouse) {
 		
-		left = key.left.pressed;
-		right = key.right.pressed;
+		int centerX = x + 40;
+		if(key.left.pressed && centerX > 0) {
+			left = true;
+		} else {
+			left = false;
+		}
+		if(key.right.pressed && centerX < WindowManager.WIDTH) {
+			right = true;
+		} else {
+			right = false;
+		}
 
 	}
 

@@ -14,7 +14,7 @@ public class WindowManager {
 	private JPanel panel;
 	
 	public static final int WIDTH = 384;
-	public static final int HEIGHT = 552;
+	public static final int HEIGHT = 512;
 	
 	public WindowManager() {
 		frame = new JFrame("Dragon Flight");

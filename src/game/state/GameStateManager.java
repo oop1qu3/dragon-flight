@@ -12,7 +12,9 @@ public class GameStateManager {
 	
 	public GameStateManager() {
 		states = new ArrayList<GameState>();
-		
+	}
+	
+	public void start() {
 		states.add(new PlayState());
 	}
 	
@@ -33,7 +35,6 @@ public class GameStateManager {
 	}
 	
 	public void render(Graphics g) {
-        // g.setFont(GamePanelManager.fontf.getFont("MeatMadness"));
         for (int i = 0; i < states.size(); i++) {
             if (states.get(i) != null) {
                 states.get(i).render(g);

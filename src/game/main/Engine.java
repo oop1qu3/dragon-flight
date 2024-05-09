@@ -29,14 +29,15 @@ public class Engine {
 		key = new KeyHandler();
 		mouse = new MouseHandler();
 		
-		timer = new Timer(20, new MainGameUpdate());
+		timer = new Timer(15, new MainGameUpdate());
 	}
 
 	public static void start() {
-		// TODO: gameStateManager 시작
 		wm.addPanel(new GameScreen());
 		wm.addListener(key, mouse);
 		wm.createWindow();
+
+		gsm.start();
 		timer.start();
 	}
 
