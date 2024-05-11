@@ -1,7 +1,6 @@
 package game.state;
 
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 
 import game.entity.Player;
 import game.util.KeyHandler;
@@ -17,8 +16,13 @@ public class PlayState extends GameState {
 	}
 
 	@Override
-	public void update() {
+	public boolean stateUpdate() {
 		player.move();
+		//
+		//
+		//
+
+		return true;
 	}
 
 	@Override
@@ -30,6 +34,8 @@ public class PlayState extends GameState {
 	public void render(Graphics g) {
 		player.render(g);
 	}
+
+
 
 }
 

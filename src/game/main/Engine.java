@@ -3,7 +3,6 @@ package game.main;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -29,7 +28,7 @@ public class Engine {
 		key = new KeyHandler();
 		mouse = new MouseHandler();
 		
-		timer = new Timer(20, new MainGameUpdate());		// 20ms마다 메인게임 update 돌리기
+		timer = new Timer(20, new MainGameUpdate());		// 20ms마다 listupdate 돌리기
 	}
 
 	public static void start() {
@@ -44,7 +43,7 @@ public class Engine {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			gsm.update();
+			gsm.listUpdate();
 			gsm.input(key, mouse);
 		}
 
