@@ -6,23 +6,23 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import javax.swing.ImageIcon;
+// @YDH TODO 
+// Loader 클래스는 삭제할 예정입니다.
+// 추후 객체 생성 시 객체가 이미지 파일을 저장하도록 변경합니다.
 
 public class Loader {
-	
-	// FIXME: ArrayList를 이용하여 한번에 관리
+
 	public static void load() {
 		try {
 			Resource.backgroundMap = ImageIO.read(new File("image/backgroundMap.png"));
 			Resource.player = ImageIO.read(new File("image/player.png"));
-			
-			//	Resource.enemy = ImageIO.read(new File("enemy_mov.gif"));
-			Resource.enemy = new ImageIcon("image/enemy_mov.gif");	// gif는 ImageIcon 사용
 
+			// @JW : gif는 ImageIcon 사용
+			Resource.enemy = new ImageIcon("image/enemy_mov.gif");
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

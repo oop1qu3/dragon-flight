@@ -1,31 +1,34 @@
 package game.entity;
 
-// import java.awt.Rectangle;
-
-public abstract class Entity /*extends Rectangle*/ {
+public abstract class Entity { 
+	
+	protected double x;
+	protected double y;
+	protected int width;
+	protected int height;
 	
     protected boolean right = false;
     protected boolean left = false;
 
-    //
-    public int hp;
-    public boolean isAlive;
+	//@JW
+	protected int hp;
 
-    public int x,y,width,height;
-
-    public Entity(int x, int y, int width, int height, int hp, boolean isAlive){
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.hp = hp;
-        this.isAlive =isAlive;
+    
+    public Entity(double x, double y, int width, int height) {
+    	this.x = x;
+    	this.y = y;
+    	this.width = width;
+    	this.height = height;
     }
 
-//    public Entity(int x, int y, int width, int height) {
-//    	this(x, y, width, height);
-//    }
-//
+	// @JW : Enemy로 받아올 때
+	public Entity(double x, double y, int width, int height, int hp) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
 
-
+		this.hp = hp;
+	}
+    
 }

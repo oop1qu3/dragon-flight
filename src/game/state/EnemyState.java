@@ -1,12 +1,13 @@
 package game.state;
 
-import java.awt.Graphics;
+import java.awt.*;
+import java.util.ArrayList;
 
 import game.entity.Enemy;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
 
-public  class EnemyState extends GameState {
+public class EnemyState extends GameState {
 
     private Enemy enemy;
 
@@ -16,23 +17,25 @@ public  class EnemyState extends GameState {
     }
 
     @Override
-    public boolean stateUpdate() {
-        if (enemy.isAlive())    // 살아있는경우
-        {
-            enemy.move();
+    public void update(double dt) {
+        enemy.move(dt);
+    }
+
+    public boolean isAlive(){
+        if (enemy.isAlive())
             return true;
-        }
-        else                    // 죽은경우
+        else
             return false;
     }
 
     @Override
     public void input(KeyHandler key, MouseHandler mouse) {
-        // stay empty
+        // @JW : staying empty
     }
 
+
     @Override
-    public void render(Graphics g) {
+    public void render(Graphics2D g) {
         enemy.render(g);
     }
 

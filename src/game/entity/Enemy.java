@@ -3,37 +3,35 @@ package game.entity;
 import java.awt.Graphics;
 
 import game.main.Resource;
-import game.main.WindowManager;
 
-// 일단 state들이 enemystate로 나누어져있지 않고, playingstate 하나로 뭉쳐져있음
-// playingstate.class 안에서 room.class -> spawnenemy method 순으로 감
 
 public class Enemy extends Entity {
 
-    private int speed;
+    // @JW FIXME double로 하는게? dt에도 쓰이기도 하고...
+    private double speed;
 
     public Enemy() {
-        super(10, 0, 60, 60, 100, true);
-        this.speed = 5;
+        super(10, 0, 60, 60, 100);
+        this.speed = 2;
     }
 
-   public void move() {
-        y += this.speed;
+    public void move(double dt) {
+        y += this.speed * (dt * 100);   // @JW FIXME dt는 100을 곱해야 1.6, 1.5 이런식으로 쓸수 있는데?
 
-        // testing
-        hp -= 7;
-   }
+        // @JW : testing
+        hp -= 2;
+    }
 
-   public boolean isAlive(){
+    public boolean isAlive(){
         if (this.hp > 0)
             return true;
         else
             return false;
-   }
+    }
 
+    // @JW : gif는 스윙 ImageIcon의 paintIcon 사용
     public void render(Graphics g) {
-        //g.drawImage(Resource.enemy, x, y, width, height, null);
-        Resource.enemy.paintIcon(null, g, x, y);    // gif라 스윙 ImageIcon의 paintIcon 사용
+        Resource.enemy.paintIcon(null, g, (int)x, (int)y);
     }
 
 }

@@ -1,70 +1,89 @@
 package game.state;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.TimerTask;
 
+import game.entity.Enemy;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
 
-//
+// @JW
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class GameStateManager {
 
-    private ArrayList<GameState> states;
+	private ArrayList<GameState> states;
 
-    public GameStateManager() {
-        states = new ArrayList<GameState>();    // state 리스트 객체생성
+	// @JW
+	private ArrayList<EnemyState> enemies;
 
-        states.add(new PlayState());    // player state 객체를 리스트에 추가
-        states.add(new EnemyState());   // enemy state 객체를 리스트에 추가
-    }
+	public GameStateManager() {
+		states = new ArrayList<GameState>();
+		states.add(new PlayState());
 
-    // FIXME 몬스터 state 지우는거를 enemystate에서? 여기서하는건 좀 이상한데
-    public void listUpdate() {
-        for (int i = 0; i < states.size(); i++) {
-            //if (states.get(i) != null)
-            //states.get(i).stateUpdate();
+		// @JW
+		enemies = new ArrayList<EnemyState>();
+		enemies.add(new EnemyState());
+	}
 
-            if(!(states.get(i).stateUpdate()))      // FIXME
-            {
-                states.remove(i);   // 삭제되기 때문에 뒤에있던 원소 앞으로 쉬프트됨
-                i--;                // 그래서 인덱스 하나 줄임
+	public void start() {
+		states.add(new PlayState());
+	}
 
-                // FIXME
-                // Timer 객체 이용하여 3초후에 EnemyState 재생성
-                {   
-                    Timer reGen = new Timer();
-                    reGen.schedule(
-                            new TimerTask(){
-                                @Override
-                                public void run(){
-                                    states.add(new EnemyState());
-                                    reGen.cancel();
-                                }}, 3000);
-                }
+	public void update(double dt) {
 
-            }
-        }
-    }
+		for (int i = 0; i < states.size(); i++) {
+			if (states.get(i) != null)
+				states.get(i).update(dt);
+		}
+
+		// @JW FIXME 일단은 GSM클래스 내에서 EnemyState 배열 선언 후 그 안에서 넣고 빼고 아래 함수 통해 관리중
+		for(int i = 0; i < enemies.size(); i++) {
+
+			if (enemies.get(i).isAlive())
+				enemies.get(i).update(dt);
+			else
+			{
+				enemies.remove(i);
+				i--;
+
+				// @JW FIXME 일단은 Timer 썼음
+				Timer reGen = new Timer();
+				reGen.schedule(
+						new TimerTask(){
+							@Override
+							public void run(){
+								enemies.add(new EnemyState());
+								reGen.cancel();
+							}
+						}, (3000));
+			}
+		}
+	}
 
 
-    public void input(KeyHandler key, MouseHandler mouse) {
-        for (int i = 0; i < states.size(); i++) {
-            if (states.get(i) != null) {
-                states.get(i).input(key, mouse);
-            }
-        }
-    }
+public void input(KeyHandler key, MouseHandler mouse) {
+	for (int i = 0; i < states.size(); i++) {
+		if (states.get(i) != null) {
+			states.get(i).input(key, mouse);
+		}
+	}
+}
 
-    public void render(Graphics g) {
-        // g.setFont(GamePanelManager.fontf.getFont("MeatMadness"));
-        for (int i = 0; i < states.size(); i++) {
-            if (states.get(i) != null) {
-                states.get(i).render(g);
-            }
-        }
-    }
+public void render(Graphics2D g) {
+
+	for (int i = 0; i < states.size(); i++) {
+		if (states.get(i) != null) {
+			states.get(i).render(g);
+
+		}
+	}
+
+	// @JW
+	for(EnemyState i : enemies)
+		i.render(g);
+
+}
 
 }
