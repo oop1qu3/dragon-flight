@@ -20,10 +20,10 @@ public class GameStateManager {
 		states.add(new PlayState());
 	}
 	
-	public void update() {
+	public void update(double dt) {
 		for (int i = 0; i < states.size(); i++) {
             if (states.get(i) != null) {
-                states.get(i).update();
+                states.get(i).update(dt);
             }
         }
 	}

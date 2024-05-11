@@ -9,23 +9,25 @@ import game.util.MouseHandler;
 
 public class PlayState extends GameState {
 
-	private Player player;
 	private Background background;
-	// TODO enemy 멤버변수 만들기
-	// TODO bullet 멤버변수 만들기
+	private Player player;
+	// @YDH TODO private Enemy enemy;
+	// @YDH TODO private Bullet bullet;
 
 	public PlayState() {
 		super();
-		player = new Player();
 		background = new Background();
+		player = new Player();
+		// @YDH TODO enemy = new Enemy();
+		// @YDH TODO bullet = new Bullet();
 	}
 
 	@Override
-	public void update() {
-		background.move();
-		player.move();
-		// TODO enemy.move();
-		// TODO bullet.move();
+	public void update(double dt) {
+		background.move(dt);
+		player.move(dt);
+		// @YDH TODO enemy.move();
+		// @YDH TODO bullet.move();
 	}
 
 	@Override
@@ -37,8 +39,8 @@ public class PlayState extends GameState {
 	public void render(Graphics2D g) {
 		background.render(g);
 		player.render(g);
-		// TODO enemy.render(g);
-		// TODO projectile.render(g);
+		// @YDH TODO enemy.render(g);
+		// @YDH TODO bullet.render(g);
 	}
 
 }

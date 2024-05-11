@@ -69,7 +69,7 @@ public class GamePanel extends JPanel implements Runnable {
 			lastNanoTime = temp;
 			nowNanoTime = System.nanoTime();
 			temp = nowNanoTime;
-			dt = nowNanoTime - lastNanoTime;
+			dt = (nowNanoTime - lastNanoTime) / 1e9;
 			
 			update(dt);
 			input(key, mouse);
@@ -126,7 +126,7 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	public void update(double dt) {
-		gsm.update(); // FIXME gsm.update(dt);
+		gsm.update(dt);
 	}
 
 	public void input(KeyHandler key, MouseHandler mouse) {
