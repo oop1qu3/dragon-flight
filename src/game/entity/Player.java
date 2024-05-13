@@ -11,7 +11,7 @@ public class Player extends Entity {
 	private int speed;
 
 	public Player() {
-		super((384 - 80) / 2, 512 - 100, 80, 80); // @YDH FIXME 상수 선언
+		super((384 - 80) / 2, 512 - 100, 80, 80); // FIXME @YDH : 상수 선언
 		this.speed = 500;
 	}
 
@@ -34,7 +34,7 @@ public class Player extends Entity {
 		} else {
 			left = false;
 		}
-		if(key.right.pressed && centerX < 384) { // @YDH FIXME 상수 선언
+		if(key.right.pressed && centerX < 384) { // FIXME @YDH : 상수 선언
 			right = true;
 		} else {
 			right = false;
