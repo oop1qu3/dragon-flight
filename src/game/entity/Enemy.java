@@ -1,11 +1,15 @@
 package game.entity;
 
 import java.awt.Graphics;
-
 import game.main.Resource;
 
+import javax.swing.*;
+import java.awt.image.BufferedImage;
 
 public class Enemy extends Entity {
+
+    // @JW : gif는 ImageIcon 사용
+    public static ImageIcon enemy = new ImageIcon("image/enemy_mov.gif");
 
     // @JW FIXME double로 하는게? dt에도 쓰이기도 하고...
     private double speed;
@@ -31,7 +35,7 @@ public class Enemy extends Entity {
 
     // @JW : gif는 스윙 ImageIcon의 paintIcon 사용
     public void render(Graphics g) {
-        Resource.enemy.paintIcon(null, g, (int)x, (int)y);
+        enemy.paintIcon(null, g, (int)x, (int)y);
     }
 
 }

@@ -17,9 +17,6 @@ public class Loader {
 			Resource.backgroundMap = ImageIO.read(new File("image/backgroundMap.png"));
 			Resource.player = ImageIO.read(new File("image/player.png"));
 
-			// @JW : gif는 ImageIcon 사용
-			Resource.enemy = new ImageIcon("image/enemy_mov.gif");
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
