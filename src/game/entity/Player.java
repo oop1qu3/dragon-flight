@@ -28,16 +28,16 @@ public class Player extends Entity {
 
 	public void input(KeyHandler key, MouseHandler mouse) {
 		
+		left = key.left.pressed;
+		right = key.right.pressed;
+		
 		double centerX = x + 40;
-		if(key.left.pressed && centerX > 0) {
-			left = true;
-		} else {
-			left = false;
+		
+		if(centerX <= 5) {
+			x = 5 - 40;
 		}
-		if(key.right.pressed && centerX < 384) { // FIXME @YDH : 상수 선언
-			right = true;
-		} else {
-			right = false;
+		if(centerX >= 384 - 5) { // FIXME @YDH : 상수 선언
+			x = 384 - 5 - 40;
 		}
 
 	}

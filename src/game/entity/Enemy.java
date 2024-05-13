@@ -16,10 +16,7 @@ public class Enemy extends Entity {
     public Enemy() {
     	super(10, 0, 10, 10);
     	
-		ImageIcon temp = new ImageIcon("image/player.png");
-		Image img = temp.getImage();
-		Image updateImg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-		this.img = new ImageIcon(updateImg);
+    	this.img = new ImageIcon("image/enemy_mov.gif");
     	
         this.hp = 100;
         this.speed = 200;
