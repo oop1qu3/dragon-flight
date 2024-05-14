@@ -41,9 +41,15 @@ public class Player extends Entity {
 		}
 
 	}
+	
 
 	public void render(Graphics2D g) {
 		g.drawImage(Resource.player, (int)x, (int)y, width, height, null);
+	}
+	
+	// @YCW: add getX for x position of bullet
+	public double getX() {
+		return x;
 	}
 
 }
