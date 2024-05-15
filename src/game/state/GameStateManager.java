@@ -76,7 +76,6 @@ public void render(Graphics2D g) {
 	for (int i = 0; i < states.size(); i++) {
 		if (states.get(i) != null) {
 			states.get(i).render(g);
-
 		}
 	}
 
