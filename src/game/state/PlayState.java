@@ -1,9 +1,11 @@
 package game.state;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import game.entity.Bullet;
+import game.entity.Enemy;
 import game.entity.Player;
 import game.map.Background;
 import game.util.KeyHandler;
@@ -13,7 +15,7 @@ public class PlayState extends GameState {
 
 	private Background background;
 	private Player player;
-	// @YDH TODO private Enemy enemy;
+	private ArrayList<Enemy> enemies;
 
 	// bullet
 	private double elapsed = 0;
@@ -21,18 +23,33 @@ public class PlayState extends GameState {
 	private Bullet bullet;
 	private CopyOnWriteArrayList<Bullet> bullets = new CopyOnWriteArrayList<>();
 
+
 	public PlayState() {
 		super();
 		background = new Background();
 		player = new Player();
-		// @YDH TODO enemy = new Enemy();
+
+		// @JW
+		enemies = new ArrayList<Enemy>();
+		spawn();
 	}
 
 	@Override
 	public void update(double dt) {
 		background.move(dt);
 		player.move(dt);
-		// @YDH TODO enemy.move();
+
+		// @JW : enemies 업데이트 함수
+		for(int i = 0; i < enemies.size(); i++)
+		{
+			if (enemies.get(i).isAlive() || !(enemies.get(i).isOut()))
+				enemies.get(i).move(dt);
+			else
+			{
+				enemies.clear();
+				spawn();
+			}
+		}
 
 		fireBullet(dt);
 
@@ -46,6 +63,18 @@ public class PlayState extends GameState {
 
 	}
 
+	// @JW
+	public void spawn() {
+		int x = 0;
+
+		for(int i = 0 ; i < 5; i++)
+		{
+			Enemy tempE = new Enemy(x);
+			enemies.add(tempE);
+			x += 78;
+		}
+	}
+
 	@Override
 	public void input(KeyHandler key, MouseHandler mouse) {
 		player.input(key, mouse);
@@ -55,12 +84,14 @@ public class PlayState extends GameState {
 	public void render(Graphics2D g) {
 		background.render(g);
 		player.render(g);
-		// @YDH TODO enemy.render(g);
 
-		//
 		for(Bullet bullet: bullets) {
 			bullet.render(g);
 		}
+
+		// @JW
+		for(Enemy i : enemies)
+			i.render(g);
 	}
 
 	public void fireBullet(double dt) {
@@ -72,5 +103,8 @@ public class PlayState extends GameState {
 			elapsed = 0;
 		}
 	}
+
+
+
 }
 
