@@ -64,7 +64,7 @@ public class GamePanel extends JPanel implements Runnable {
 		int runningTime = 0;
 		
 		int frameCount = 0;
-		final double TARGET_FPS = 64.0;
+		final double TARGET_FPS = 144.0;
 		final double TARGET_DELAY = 1e9 / TARGET_FPS;
 		
 		while (running) {
@@ -73,8 +73,8 @@ public class GamePanel extends JPanel implements Runnable {
 			nowNanoTime = System.nanoTime();
 			dt = (nowNanoTime - lastNanoTime) * NS_TO_S;
 			
-			update(dt);
 			input(key, mouse);
+			update(dt);
 			render();
 			draw();
 			frameCount++;

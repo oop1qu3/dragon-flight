@@ -55,9 +55,13 @@ public class Player extends Entity {
 
 		if (centerX <= 5) {
 			x = 5 - 40;
+			left = false;
+			if (key.left.pressed && key.right.pressed) right = false;
 		}
 		if (centerX >= 384 - 5) { // FIXME @YDH : 상수 선언
 			x = 384 - 5 - 40;
+			right = false;
+			if (key.left.pressed && key.right.pressed) left = false;
 		}
 
 	}
