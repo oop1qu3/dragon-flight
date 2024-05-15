@@ -16,10 +16,7 @@ public class Enemy extends Entity {
     public Enemy() {
     	super(10, 0, 10, 10);
     	
-		ImageIcon temp = new ImageIcon("image/player.png");
-		Image img = temp.getImage();
-		Image updateImg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-		this.img = new ImageIcon(updateImg);
+    	this.img = new ImageIcon("image/enemy_mov.gif");
     	
         this.hp = 100;
         this.speed = 200;
@@ -40,7 +37,7 @@ public class Enemy extends Entity {
     }
 
     // @JW : gif는 스윙 ImageIcon의 paintIcon 사용
-    // FIXME @YDH : 더블 버퍼링 적용 안됨. sprite를 만들어야 할지도..
+    // FIXME @YDH : gif는 사이즈 조절이 안됨. 외부 환경에서 조절하거나, sprite로 다루거나 해야할듯.
     public void render(Graphics g) {
     	if (isAlive())
     		img.paintIcon(null, g, (int)x, (int)y); 
