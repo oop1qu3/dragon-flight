@@ -29,7 +29,6 @@ public class PlayState extends GameState {
 		background = new Background();
 		player = new Player();
 
-		// @JW
 		enemies = new ArrayList<Enemy>();
 		spawn();
 	}
@@ -63,7 +62,6 @@ public class PlayState extends GameState {
 
 	}
 
-	// @JW
 	public void spawn() {
 		int x = 0;
 
@@ -74,6 +72,17 @@ public class PlayState extends GameState {
 			x += 78;
 		}
 	}
+
+	public void fireBullet(double dt) {
+		elapsed = elapsed + dt;
+		if (elapsed > bulletPeriod) {
+			Bullet bullet = new Bullet((int)player.getX());
+			bullets.add(bullet);
+
+			elapsed = 0;
+		}
+	}
+
 
 	@Override
 	public void input(KeyHandler key, MouseHandler mouse) {
@@ -89,22 +98,8 @@ public class PlayState extends GameState {
 			bullet.render(g);
 		}
 
-		// @JW
 		for(Enemy i : enemies)
 			i.render(g);
 	}
-
-	public void fireBullet(double dt) {
-		elapsed = elapsed + dt;
-		if (elapsed > bulletPeriod) {
-			Bullet bullet = new Bullet((int)player.getX());
-			bullets.add(bullet);
-
-			elapsed = 0;
-		}
-	}
-
-
-
 }
 

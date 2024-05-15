@@ -1,21 +1,19 @@
 package game.entity;
 
 import java.awt.Graphics;
-import game.main.Resource;
-
 import javax.swing.*;
-import java.awt.image.BufferedImage;
 
 import static game.main.Window.HEIGHT;
 import static game.main.Window.WIDTH;
 
+// asdf
 
 public class Enemy extends Entity {
 
     // @JW : gif는 ImageIcon 사용
     public static ImageIcon enemy = new ImageIcon("image/enemy_mov.gif");
 
-    private double speed;   // @JW FIXME double로 하는게? dt에도 쓰이기도 하고...
+    private double speed;   // @JW : double?
 
     public Enemy(int x) {
 
@@ -24,7 +22,7 @@ public class Enemy extends Entity {
     }
 
     public void move(double dt) {
-        y += this.speed * (dt * 100);   // @JW FIXME dt는 100을 곱해야 1.6, 1.5 이런식으로 쓸수 있는데?
+        y += this.speed * (dt * 100);   // @JW : dt에 100 곱해야 1.6, 1.5 이렇게 배수 곱해짐
 
         // @JW : testing
         hp -= 2;
