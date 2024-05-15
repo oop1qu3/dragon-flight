@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 import game.state.GameStateManager;
+import game.state.PlayState;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
 
