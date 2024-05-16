@@ -28,7 +28,6 @@ public class Player extends Entity {
 
 	}
 
-
 	public void input(KeyHandler key, MouseHandler mouse) {
 
 		double centerX = x + 40;

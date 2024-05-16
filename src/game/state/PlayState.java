@@ -83,6 +83,17 @@ public class PlayState extends GameState {
 		}
 	}
 
+	// 몬스터 5마리가 각각 총알 xy좌표랑 겹치면 hp를 깎아야됨
+	public void enemyHit(double dt){
+		for(int i = 0; i < enemies.size(); i++)
+		{
+			// @JW : 일단 좌표 일치하면 gethit(getdamage) 실행
+			for(int j = 0; j < bullets.size(); j++)
+				if(enemies.get(i).getX() == bullets.get(j).getX() &&
+						enemies.get(i).getY() == bullets.get(j).getY())
+					enemies.get(i).getHit(bullets.get(j).getDam());
+		}
+	}
 
 	@Override
 	public void input(KeyHandler key, MouseHandler mouse) {

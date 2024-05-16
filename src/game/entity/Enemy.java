@@ -6,7 +6,7 @@ import javax.swing.*;
 import static game.main.Window.HEIGHT;
 import static game.main.Window.WIDTH;
 
-// asdf
+
 
 public class Enemy extends Entity {
 
@@ -24,23 +24,28 @@ public class Enemy extends Entity {
     public void move(double dt) {
         y += this.speed * (dt * 100);   // @JW : dt에 100 곱해야 1.6, 1.5 이렇게 배수 곱해짐
 
-        // @JW : testing
-        hp -= 2;
     }
 
     public boolean isAlive(){
-        if (this.hp > 0)
-            return true;
-        else
-            return false;
+        return this.hp > 0;
     }
 
     public boolean isOut(){
-        if (this.y > HEIGHT)
-            return true;
-        else
-            return false;
+        return this.y > HEIGHT;
     }
+
+    public double getX(){
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void getHit(int damage) {
+        this.hp -= damage;
+    }
+
 
     // @JW : gif는 스윙 ImageIcon의 paintIcon 사용
     public void render(Graphics g) {
