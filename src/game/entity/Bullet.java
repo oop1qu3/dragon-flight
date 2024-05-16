@@ -27,14 +27,13 @@ public class Bullet extends Entity{
     public void loadImg(String path) {
         try {
             this.bulletImg = ImageIO.read(new File(path));
-        }
-        catch (IOException e) {
+        }catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void move() {
-        y -= this.speed;
+    public void move(double dt) {
+        y -= this.speed * (dt * 100);
     }
 
     public boolean isOut() {

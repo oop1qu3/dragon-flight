@@ -53,7 +53,7 @@ public class PlayState extends GameState {
 		fireBullet(dt);
 
 		for (Bullet bullet: bullets) {
-			bullet.move();
+			bullet.move(dt);
 
 			if (bullet.isOut()) {
 				bullets.remove(bullet);
