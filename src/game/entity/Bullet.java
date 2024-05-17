@@ -21,7 +21,7 @@ public class Bullet extends Entity{
         loadImg(imgPath);
 
         this.speed = 50;
-        this.damage = 20;
+        this.damage = 30;
     };
 
     public void loadImg(String path) {

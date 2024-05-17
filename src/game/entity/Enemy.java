@@ -30,9 +30,10 @@ public class Enemy extends Entity {
         return this.hp > 0;
     }
 
-    public boolean isOut(){
+    public boolean isOut(){     // FIXME
         return this.y > HEIGHT;
     }
+
 
     public double getX(){
         return x;

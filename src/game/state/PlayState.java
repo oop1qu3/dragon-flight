@@ -11,6 +11,8 @@ import game.map.Background;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
 
+import static java.lang.Math.abs;
+
 public class PlayState extends GameState {
 
 	private Background background;
@@ -39,15 +41,21 @@ public class PlayState extends GameState {
 		player.move(dt);
 
 		// @JW : enemies 업데이트 함수
+		enemyHit(dt);
+
 		for(int i = 0; i < enemies.size(); i++)
 		{
-			if (enemies.get(i).isAlive() || !(enemies.get(i).isOut()))
-				enemies.get(i).move(dt);
+
+			if (enemies.get(i).isAlive())
+				if((enemies.get(i).isOut()))
+				{
+					enemies.clear();
+					spawn();
+				}
+				else
+					enemies.get(i).move(dt);
 			else
-			{
-				enemies.clear();
-				spawn();
-			}
+				enemies.remove(i);
 		}
 
 		fireBullet(dt);
@@ -60,6 +68,18 @@ public class PlayState extends GameState {
 			}
 		}
 
+
+
+	}
+
+	public void fireBullet(double dt) {
+		elapsed = elapsed + dt;
+		if (elapsed > bulletPeriod) {
+			Bullet bullet = new Bullet((int)player.getX());
+			bullets.add(bullet);
+
+			elapsed = 0;
+		}
 	}
 
 	public void spawn() {
@@ -73,24 +93,14 @@ public class PlayState extends GameState {
 		}
 	}
 
-	public void fireBullet(double dt) {
-		elapsed = elapsed + dt;
-		if (elapsed > bulletPeriod) {
-			Bullet bullet = new Bullet((int)player.getX());
-			bullets.add(bullet);
-
-			elapsed = 0;
-		}
-	}
-
 	// 몬스터 5마리가 각각 총알 xy좌표랑 겹치면 hp를 깎아야됨
 	public void enemyHit(double dt){
 		for(int i = 0; i < enemies.size(); i++)
 		{
-			// @JW : 일단 좌표 일치하면 gethit(getdamage) 실행
+			// @JW : 좌표 범위내에 들어오면 gethit(getdamage) 실행
 			for(int j = 0; j < bullets.size(); j++)
-				if(enemies.get(i).getX() == bullets.get(j).getX() &&
-						enemies.get(i).getY() == bullets.get(j).getY())
+				if((abs (enemies.get(i).getX() - bullets.get(j).getX()) <= 40) &&
+						(abs (enemies.get(i).getY() - bullets.get(j).getY()) <= 40))
 					enemies.get(i).getHit(bullets.get(j).getDam());
 		}
 	}
