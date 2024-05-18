@@ -49,6 +49,7 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	public void run() {
+		
 		init();
 		
 		final double NS_TO_S = 1 / 1e9;
@@ -109,6 +110,7 @@ public class GamePanel extends JPanel implements Runnable {
 			
             while (System.nanoTime() - nsCurrent < DRAW_INTERVAL) {} // Busy-waiting
 		}
+		
 	}
 	
 	public void init() {
