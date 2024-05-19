@@ -25,11 +25,11 @@ public class GameStateManager {
 	public void render(Graphics2D g) {
 		state.render(g);
 	}
-	
+
 	public void setState(GameState state) {
 		this.state = state;
 	}
-	
+
 	public GameState getState() {
 		return state;
 	}

@@ -1,46 +1,74 @@
 package game.entity;
 
 import java.awt.Graphics;
-import java.awt.Image;
+import java.util.ArrayList;
+import javax.swing.*;
+import static java.lang.Math.abs;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
+import game.state.GameState;
+import game.state.PlayState;
+
+import static game.main.Window.HEIGHT;
+import static game.main.Window.WIDTH;
+
 
 public class Enemy extends Entity {
 
-    
-	private ImageIcon img;
-    private double speed; // FIXME @JW : double로 하는게? dt에도 쓰이기도 하고...
-    private int hp;
+    public static ImageIcon enemy = new ImageIcon("image/enemy_mov.gif");
 
-    public Enemy() {
-    	super(10, 0, 10, 10);
-    	
-    	this.img = new ImageIcon("image/enemy_mov.gif");
-    	
-        this.hp = 100;
-        this.speed = 200;
+    private double speed;
+
+    // FIXME
+    private GameState state;
+
+    public Enemy(int x, GameState state) {
+        super(x, -70, 60, 60, 100);      // @JW 사이즈 조절?
+        this.speed = 3;
+
+        this.state = state;
     }
 
     public void move(double dt) {
-        y += this.speed * dt; // FIXME @JW : dt는 100을 곱해야 1.6, 1.5 이런식으로 쓸수 있는데?
+        y += this.speed * (dt * 100);
 
-        // @JW : testing
-        // hp -= 2;
     }
 
     public boolean isAlive(){
-        if (this.hp > 0)
-            return true;
-        else
-            return false;
+        return this.hp > 0;
     }
 
-    // @JW : gif는 스윙 ImageIcon의 paintIcon 사용
-    // FIXME @YDH : gif는 사이즈 조절이 안됨. 외부 환경에서 조절하거나, sprite로 다루거나 해야할듯.
+    public boolean isOut(){     // FIXME
+        return this.y > HEIGHT;
+    }
+
+    public void enemyHit(){
+        ArrayList<Bullet> bullets = ((PlayState)state).getBullets();
+
+        // @JW : 좌표 범위내에 들어오면
+        for(int i = 0; i < bullets.size(); i++)
+            if((abs (x - bullets.get(i).getX()) <= 40) &&
+                    (abs (y - bullets.get(i).getY()) <= 40))
+                this.hp -= bullets.get(i).getDam();
+    }
+
     public void render(Graphics g) {
-    	if (isAlive())
-    		img.paintIcon(null, g, (int)x, (int)y); 
+        enemy.paintIcon(null, g, (int)x, (int)y);
     }
 
+    public double getX(){
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    // @YCW: add getWidth and getHeight for implementing the checking collision between character and enemy
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
 }
