@@ -18,37 +18,26 @@ public class PlayState extends GameState {
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Bullet> bullets;
 
+	// @JW : spawn related, milliseconds.
+	private final int SPAWN_DELAY = 3000;
+	private long lastSpawnTime;
+
 	public PlayState(GameStateManager gsm) {
 		super(gsm);
 		background = new Background();
 		player = new Player(this);
-		enemies = new ArrayList<Enemy>();	// @JW : Enemy 객체에 state 대입은 아래 spawn 메소드에서
+		enemies = new ArrayList<Enemy>();		// @JW : Enemy 객체에 state 대입은 아래 spawn 메소드에서
 		spawn();
 		bullets = new ArrayList<Bullet>();
-
 	}
 
 	@Override
 	public void update(double dt) {
 		background.move(dt);
+
 		player.move(dt);
 		player.fire(dt);
-
-		// @JW : enemies 업데이트 함수
-		for(int i = 0; i < enemies.size(); i++)
-		{
-			enemies.get(i).enemyHit();
-
-			if((enemies.get(i).isOut())) {
-				enemies.clear();
-				spawn();
-			}
-
-			if (enemies.get(i).isAlive())
-				enemies.get(i).move(dt);
-			else
-				enemies.remove(i);
-		}
+		player.checkCollision(dt); // @YCW: pass dt to this for checking elapsed invincible time
 
 		for (int i = 0; i < bullets.size();) {
 			Bullet bullet = bullets.get(i);
@@ -60,11 +49,30 @@ public class PlayState extends GameState {
 			}
 			i++;
 		}
+
+		// @JW : enemies related
+		if (System.currentTimeMillis() - lastSpawnTime >= SPAWN_DELAY){
+
+			if(enemies.isEmpty())
+				spawn();
+
+			enemies.clear();
+			spawn();
+		}
+		for (int i = 0; i < enemies.size(); i++) {
+			enemies.get(i).enemyHit();
+
+			if (enemies.get(i).isAlive())
+				enemies.get(i).move(dt);
+			else
+				enemies.remove(i);
+		}
 	}
 
 	public void spawn() {
-		int x = 0;
+		lastSpawnTime = System.currentTimeMillis();
 
+		int x = 0;
 		for(int i = 0 ; i < 5; i++)
 		{
 			Enemy tempE = new Enemy(x, this);
@@ -83,12 +91,11 @@ public class PlayState extends GameState {
 		background.render(g);
 		player.render(g);
 
-		for(Bullet bullet: bullets) {
-			bullet.render(g);
-		}
+		for(Bullet b: bullets)
+			b.render(g);
 
-		for(Enemy i : enemies)
-			i.render(g);
+		for(Enemy e : enemies)
+			e.render(g);
 	}
 
 	public ArrayList<Bullet> getBullets() {

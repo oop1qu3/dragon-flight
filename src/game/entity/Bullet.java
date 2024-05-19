@@ -20,8 +20,8 @@ public class Bullet extends Entity{
 
         loadImg(imgPath);
 
-        this.speed = 50;
-        this.damage = 30;
+        this.speed = 1000;
+        this.damage = 100; // current enemy's hp is 100
     };
 
     public void loadImg(String path) {
@@ -33,7 +33,7 @@ public class Bullet extends Entity{
     }
 
     public void move(double dt) {
-        y -= this.speed * (dt * 100);
+        y -= this.speed * dt;
     }
 
     public boolean isOut() {
