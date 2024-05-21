@@ -1,16 +1,21 @@
 package game.entity;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
-import game.main.Resource;
+import javax.imageio.ImageIO;
+
 import game.state.GameState;
-import game.state.GameStateManager;
 import game.state.PlayState;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
 
 public class Player extends Entity {
 
+	private BufferedImage img;
+	
 	private int speed;
 	private GameState state;
 
@@ -19,6 +24,13 @@ public class Player extends Entity {
 
 	public Player(GameState state) {
 		super((384 - 80) / 2, 512 - 100, 80, 80); // FIXME @YDH : 상수 선언
+		
+		try {
+			img = ImageIO.read(new File("image/player.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		this.speed = 500;
 		this.state = state;
 	}
@@ -68,7 +80,7 @@ public class Player extends Entity {
 	
 
 	public void render(Graphics2D g) {
-		g.drawImage(Resource.player, (int) x, (int) y, width, height, null);
+		g.drawImage(img, (int) x, (int) y, width, height, null);
 	}
 	
 	// @YCW: add getX for x position of bullet

@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import game.entity.Bullet;
 import game.entity.Enemy;
 import game.entity.Player;
-import game.entity.Bullet;
 import game.map.Background;
+import game.math.Vector2f;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
 
@@ -18,12 +18,16 @@ public class PlayState extends GameState {
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Bullet> bullets;
 	
+	private Test test;
+	
 	public PlayState(GameStateManager gsm) {
 		super(gsm);
 		background = new Background();
 		player = new Player(this);
 		enemies = new ArrayList<Enemy>();
 		bullets = new ArrayList<Bullet>();
+		
+		test = new Test(new Vector2f(50, 50));
 	}
 
 	@Override
@@ -47,6 +51,8 @@ public class PlayState extends GameState {
             
             ++i;
 	    }
+	    
+	    test.update(dt);
 
 	}
 
@@ -57,12 +63,14 @@ public class PlayState extends GameState {
 
 	@Override
 	public void render(Graphics2D g) {
-		background.render(g);
-		player.render(g);
+//		background.render(g);
+//		player.render(g);
+//		
+//		for(Bullet bullet: bullets) {
+//			bullet.render(g);
+//		}
 		
-		for(Bullet bullet: bullets) {
-			bullet.render(g);
-		}
+		test.render(g);
 	}
 
 	public ArrayList<Bullet> getBullets() {

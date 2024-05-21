@@ -39,6 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
 		requestFocus();
 	}
 
+	@Override
 	public void addNotify() {
 		super.addNotify();
 

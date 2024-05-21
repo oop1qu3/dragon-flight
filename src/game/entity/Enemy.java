@@ -6,12 +6,15 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import game.graphics.particle.ParticleSystem;
+
 public class Enemy extends Entity {
 
-    
 	private ImageIcon img;
     private double speed; // FIXME @JW : double로 하는게? dt에도 쓰이기도 하고...
     private int hp;
+    
+    private ParticleSystem deathEffect;
 
     public Enemy() {
     	super(10, 0, 10, 10);
@@ -19,11 +22,11 @@ public class Enemy extends Entity {
     	this.img = new ImageIcon("image/enemy_mov.gif");
     	
         this.hp = 100;
-        this.speed = 200;
+        this.speed = 20;
     }
 
     public void move(double dt) {
-        y += this.speed * dt; // FIXME @JW : dt는 100을 곱해야 1.6, 1.5 이런식으로 쓸수 있는데?
+        y += this.speed * dt;
 
         // @JW : testing
         // hp -= 2;

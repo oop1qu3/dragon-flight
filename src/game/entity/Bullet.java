@@ -52,6 +52,6 @@ public class Bullet extends Entity {
 
 	public void render(Graphics g) {
 		// @YCW: x should be always equal to x position of player
-		g.drawImage(this.bulletImg, (int) x, (int) y, width, height, null);
+		g.drawImage(this.bulletImg, (int)x, (int)y, width, height, null);
 	}
 }
