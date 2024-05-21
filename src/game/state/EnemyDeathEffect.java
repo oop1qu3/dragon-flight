@@ -15,11 +15,23 @@ public class EnemyDeathEffect {
 		enemyDeathCloud = new ParticleSystem("image/effect/enemyDeathCloud.png", origin);
 		enemyDeathGlow = new ParticleSystem("image/effect/enemyDeathGlow.png", origin);
 		
-		enemyDeathCloud.setStartLifetime(1.0);
+		setEnemyDeathCloud();
+		setEnemyDeathGlow();
+		
+		enemyDeathCloud.init();
+		enemyDeathGlow.init();
+	}
+	
+	private void setEnemyDeathCloud() {
+		// senemyDeathCloud.setStartLifetime(1.0);
 		enemyDeathCloud.setStartRotation(0, 360);
 		
-		enemyDeathCloud.setShape(new Circle(20.0));
 		enemyDeathCloud.setEmission(8);
+		enemyDeathCloud.setShape(new Circle(20.0f));
+	}
+	
+	private void setEnemyDeathGlow() {
+		
 	}
 	
 	public void play(double dt) {

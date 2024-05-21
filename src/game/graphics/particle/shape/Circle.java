@@ -1,11 +1,23 @@
 package game.graphics.particle.shape;
 
 public class Circle extends Shape {
-	private double radius;
-	// private double radiusThickness; // 0~1 (later..)
+	private float radius;
+	private float radiusThickness;
 	
-	public Circle(double radius) {
+	public Circle(float radius, float radiusThickness) {
 		this.radius = radius;
-		// this.radiusThickness = radiusThickness;
+		this.radiusThickness = radiusThickness;
+	}
+	
+	public Circle(float radius) {
+		this(radius, 1);
+	}
+	
+	public float getRadius() {
+		return radius;
+	}
+	
+	public float getRadiusThickness() {
+		return radiusThickness;
 	}
 }

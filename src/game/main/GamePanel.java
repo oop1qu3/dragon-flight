@@ -15,9 +15,9 @@ import game.util.KeyHandler;
 import game.util.MouseHandler;
 
 public class GamePanel extends JPanel implements Runnable {
-
-	public static int width;
-	public static int height;
+	
+	public static int width;  // FIXME
+	public static int height;  // FIXME
 
 	private Thread thread;
 	private boolean running = false;

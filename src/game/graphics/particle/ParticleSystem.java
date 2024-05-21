@@ -5,9 +5,12 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.imageio.ImageIO;
 
+import game.graphics.particle.shape.Circle;
 import game.graphics.particle.shape.Shape;
 import game.math.Range;
 import game.math.Vector2f;
@@ -17,6 +20,10 @@ public class ParticleSystem {
 	// Temp
 	private BufferedImage img;  // or Sprite
 	private Vector2f origin;
+	
+	private ArrayList<Particle> particles;
+	
+	private double elapsed;
 	
 	// Main
 	private Range<Double> startLifetime;
@@ -59,18 +66,51 @@ public class ParticleSystem {
 		startColor =  new Range(start);
 	}
 	
-	public void setShape(Shape shape) {
-		this.shape = shape;
-	}
-	
 	public void setEmission(int burstsCount) {
 		this.burstsCount = burstsCount;
 	}
 	
-	public void render(Graphics2D g) {
+	public void setShape(Shape shape) {
+		this.shape = shape;
+	}
+	
+	public void init() {
+		particles = new ArrayList<Particle>(burstsCount);
+		
+		if (shape instanceof Circle) {
+			initCircle();
+		}
+	}
+	
+	private void initCircle() {
+		ThreadLocalRandom random = ThreadLocalRandom.current();
+		
 		for (int i = 0; i < burstsCount; i++) {
-			Vector2f v = new Vector2f(3f, 5f);
-			g.drawImage(img, (int)v.x, (int)v.y, 100, 100, null);
+			// angle
+			double angle = random.nextDouble(startRotation.start, startRotation.end);
+			
+			// startPos
+			float radius = ((Circle)shape).getRadius();
+			float radiusThickness = ((Circle)shape).getRadiusThickness();
+			float scale = random.nextFloat(radius * (1 - radiusThickness), radius);
+			
+			Vector2f dPos = Vector2f.createRandom(scale);
+			Vector2f startPos = this.origin.add(dPos);
+			
+			// add particle
+			Particle p = new Particle(angle, startPos);
+			particles.add(p);
+		}
+	}
+	
+	public void play(double dt) {
+		// elapsed += dt;
+	}
+	
+	public void render(Graphics2D g) {
+		for (int i = 0; i < particles.size(); i++) {
+			Vector2f pos = particles.get(i).getOrigin();
+			g.drawImage(img, (int)pos.x, (int)pos.y, 30, 30, null);
 		}
 	}
 	
