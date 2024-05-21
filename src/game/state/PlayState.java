@@ -40,16 +40,13 @@ public class PlayState extends GameState {
 		
 		// enemies.move(dt);
 		
-	    for (int i = 0; i < bullets.size();) {
+	    for (int i = bullets.size() - 1; i >= 0; i--) {
             Bullet bullet = bullets.get(i);
             bullet.move(dt);
             
             if (bullet.isOut()) {
-				bullets.remove(bullet);
-				continue;
+				bullets.remove(i);
 			}
-            
-            ++i;
 	    }
 	    
 	    test.update(dt);

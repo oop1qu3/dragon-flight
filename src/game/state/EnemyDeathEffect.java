@@ -23,11 +23,12 @@ public class EnemyDeathEffect {
 	}
 	
 	private void setEnemyDeathCloud() {
-		// senemyDeathCloud.setStartLifetime(1.0);
-		enemyDeathCloud.setStartRotation(0, 360);
+		enemyDeathCloud.setStartLifetime(0.5);
+		enemyDeathCloud.setStartSize(20.0f, 60.0f);
+		enemyDeathCloud.setStartRotation(0, 360.0f);
 		
 		enemyDeathCloud.setEmission(8);
-		enemyDeathCloud.setShape(new Circle(20.0f));
+		enemyDeathCloud.setShape(new Circle(15.0f));
 	}
 	
 	private void setEnemyDeathGlow() {
@@ -35,7 +36,7 @@ public class EnemyDeathEffect {
 	}
 	
 	public void play(double dt) {
-		
+		enemyDeathCloud.play(dt);
 	}
 	
 	public void render(Graphics2D g) {

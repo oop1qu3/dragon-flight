@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
 import javax.imageio.ImageIO;
 
@@ -14,6 +13,7 @@ import game.graphics.particle.shape.Circle;
 import game.graphics.particle.shape.Shape;
 import game.math.Range;
 import game.math.Vector2f;
+import game.util.RandomUtil;
 
 public class ParticleSystem {
 	
@@ -22,14 +22,14 @@ public class ParticleSystem {
 	private Vector2f origin;
 	
 	private ArrayList<Particle> particles;
-	
-	private double elapsed;
+
+	private boolean initiated = false;
 	
 	// Main
 	private Range<Double> startLifetime;
-	// private Range<Double> startSpeed; (later..)
-	private Range<Double> startSize;
-	private Range<Double> startRotation;
+	private Range<Float> startSpeed;
+	private Range<Float> startSize;
+	private Range<Float> startRotation;
 	private Range<Color> startColor;
 	
 	// Emission
@@ -58,7 +58,11 @@ public class ParticleSystem {
 		startLifetime = new Range(start);
 	}
 	
-	public void setStartRotation(double start, double end) {
+	public void setStartSize(float start, float end) {
+		startSize = new Range(start, end);
+	}
+	
+	public void setStartRotation(float start, float end) {
 		startRotation = new Range(start, end);
 	}
 	
@@ -80,37 +84,70 @@ public class ParticleSystem {
 		if (shape instanceof Circle) {
 			initCircle();
 		}
+		
+		initiated = true;
 	}
 	
 	private void initCircle() {
-		ThreadLocalRandom random = ThreadLocalRandom.current();
+		
+		float radius = ((Circle)shape).getRadius();
+		float radiusThickness = ((Circle)shape).getRadiusThickness();
 		
 		for (int i = 0; i < burstsCount; i++) {
-			// angle
-			double angle = random.nextDouble(startRotation.start, startRotation.end);
+			//
+			double lifetime = RandomUtil.nextDouble(startLifetime.start, startLifetime.end);
+			float size = RandomUtil.nextFloat(startSize.start, startSize.end);
+			float angle = RandomUtil.nextFloat(startRotation.start, startRotation.end);
 			
-			// startPos
-			float radius = ((Circle)shape).getRadius();
-			float radiusThickness = ((Circle)shape).getRadiusThickness();
-			float scale = random.nextFloat(radius * (1 - radiusThickness), radius);
+			//
+			float scale = RandomUtil.nextFloat(radius * (1 - radiusThickness), radius);
 			
 			Vector2f dPos = Vector2f.createRandom(scale);
 			Vector2f startPos = this.origin.add(dPos);
 			
+			Vector2f velocity = dPos.scale(0.01f);
+			
 			// add particle
-			Particle p = new Particle(angle, startPos);
+			Particle p = new Particle(lifetime, size, angle, startPos, velocity);
 			particles.add(p);
 		}
 	}
 	
 	public void play(double dt) {
-		// elapsed += dt;
+		if (initiated) {
+			for (Particle p : particles) {
+				p.updateTimer(dt);
+			}
+			
+			for (int i = particles.size() - 1; i >= 0; i--) {
+				Particle p = particles.get(i);
+				
+				if (p.isLifetimeTimerOver(p.getLifetime())) {
+					particles.remove(i);
+				}
+			}
+			
+			for (Particle p : particles) {
+				Vector2f position = p.getPosition().add(p.getVelocity());
+				p.setPosition(position);
+				
+				if (p.isSizeTimerOver(0.01)) {
+					p.setSize(p.getSize() * 0.98f);
+				}
+			}
+		}
 	}
 	
 	public void render(Graphics2D g) {
-		for (int i = 0; i < particles.size(); i++) {
-			Vector2f pos = particles.get(i).getOrigin();
-			g.drawImage(img, (int)pos.x, (int)pos.y, 30, 30, null);
+		if (initiated) {
+			for (int i = 0; i < particles.size(); i++) {
+				Particle p = particles.get(i);
+				
+				Vector2f pos = p.getPosition();
+				float size = p.getSize();
+				
+				g.drawImage(img, (int)pos.x, (int)pos.y, (int)size, (int)size, null);
+			}
 		}
 	}
 	
