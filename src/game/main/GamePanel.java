@@ -21,7 +21,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 	private Thread thread;
 	private boolean running = false;
-	
+
 	private BufferedImage img;
 	private Graphics2D g;
 
@@ -33,7 +33,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public GamePanel(int width, int height) {
 		GamePanel.width = width;
 		GamePanel.height = height;
-		
+
 		setPreferredSize(new Dimension(width, height));
 		setFocusable(true);
 		requestFocus();
@@ -50,9 +50,8 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	public void run() {
-		
 		init();
-		
+
 		final double NS_TO_S = 1 / 1e9;
 		final double NS_TO_MS = 1 / 1e6;
 
@@ -70,11 +69,11 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		while (running) {
 			//-------------------------Update time variables-------------------------//
-			
+
 			nsLast = nsCurrent;
 			nsCurrent = System.nanoTime();
 			dt = (nsCurrent - nsLast) * NS_TO_S;
-			
+
 			sCurrent = (int) (nsCurrent * NS_TO_S);
 			if (sCurrent - sLast > 0) {
 				int fps = frameCount;
@@ -111,7 +110,6 @@ public class GamePanel extends JPanel implements Runnable {
 			
             while (System.nanoTime() - nsCurrent < DRAW_INTERVAL) {} // Busy-waiting
 		}
-		
 	}
 	
 	public void init() {
@@ -122,10 +120,13 @@ public class GamePanel extends JPanel implements Runnable {
 		key = new KeyHandler(); 
 		mouse = new MouseHandler(); 
 		
+		key = new KeyHandler();
+		mouse = new MouseHandler();
+
 		addKeyListener(key);
 		addMouseListener(mouse);
 
-		gsm = new GameStateManager(); 
+		gsm = new GameStateManager();
 	}
 	
 	public void initGraphics() {
@@ -150,7 +151,7 @@ public class GamePanel extends JPanel implements Runnable {
 		g.setColor(new Color(200, 255, 200));
 		g.fillRect(0, 0, width, height);
 		gsm.render(g);
-		
+
 		// Displaying the off-screen image
 		g2.drawImage(img, 0, 0, width, height, null);
 		g2.dispose();
