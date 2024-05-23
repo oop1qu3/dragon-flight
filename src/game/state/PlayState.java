@@ -30,15 +30,8 @@ public class PlayState extends GameState {
 		enemies = new ArrayList<Enemy>();		// @JW : Enemy 객체에 state 대입은 아래 spawn 메소드에서
 		spawn();
 		bullets = new ArrayList<Bullet>();
-<<<<<<< HEAD
-=======
-		
-		tests = new ArrayList<Test>();
->>>>>>> develop
 	}
 
-	private double elapsed;
-	private ArrayList<Test> tests;
 	@Override
 	public void update(double dt) {
 		background.move(dt);
