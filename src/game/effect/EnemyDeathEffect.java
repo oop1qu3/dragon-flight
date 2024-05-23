@@ -1,4 +1,4 @@
-package game.entity;
+package game.effect;
 
 import java.awt.Graphics2D;
 
@@ -6,7 +6,7 @@ import game.graphics.particle.ParticleSystem;
 import game.graphics.particle.shape.Circle;
 import game.math.Vector2f;
 
-public class EnemyDeathEffect {
+public class EnemyDeathEffect extends Effect {
 	
 	private ParticleSystem enemyDeathCloud;
 	private ParticleSystem enemyDeathGlow;
@@ -36,13 +36,20 @@ public class EnemyDeathEffect {
 		
 	}
 	
+	@Override
+	public boolean isFinished() {
+		return enemyDeathCloud.isFinished();
+	}
+	
+	@Override
 	public void play(double dt) {
 		enemyDeathCloud.play(dt);
 	}
 	
+	@Override
 	public void render(Graphics2D g) {
 		enemyDeathCloud.render(g);
-		enemyDeathGlow.render(g);
+		// enemyDeathGlow.render(g);
 	}
 	
 }

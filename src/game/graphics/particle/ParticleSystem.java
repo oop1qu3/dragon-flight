@@ -24,6 +24,9 @@ public class ParticleSystem {
 	private ArrayList<Particle> particles;
 
 	private boolean initiated = false;
+	private boolean finished = false;
+	
+	private double particleTimer;
 	
 	// Main
 	private Range<Double> startLifetime;
@@ -59,23 +62,23 @@ public class ParticleSystem {
 	}
 	
 	public void setStartLifetime(double start) {
-		startLifetime = new Range(start);
+		startLifetime = new Range<Double>(start);
 	}
 	
 	public void setStartSpeed(float start) {
-		startSpeed = new Range(start);
+		startSpeed = new Range<Float>(start);
 	}
 	
 	public void setStartSize(float start, float end) {
-		startSize = new Range(start, end);
+		startSize = new Range<Float>(start, end);
 	}
 	
 	public void setStartRotation(float start, float end) {
-		startRotation = new Range(start, end);
+		startRotation = new Range<Float>(start, end);
 	}
 	
 	public void setStartColor(Color start) {
-		startColor =  new Range(start);
+		startColor =  new Range<Color>(start);
 	}
 	
 	public void setEmission(int burstsCount) {
@@ -93,6 +96,7 @@ public class ParticleSystem {
 			initCircle();
 		}
 		
+		particleTimer = 0;
 		initiated = true;
 	}
 	
@@ -124,6 +128,12 @@ public class ParticleSystem {
 	
 	public void play(double dt) {
 		if (initiated) {
+			particleTimer += dt;
+			
+			if (particleTimer > startLifetime.end) {
+				finished = true;
+			}
+			
 			for (int i = particles.size() - 1; i >= 0; i--) {
 				Particle p = particles.get(i);
 				
@@ -141,6 +151,10 @@ public class ParticleSystem {
 				p.setPosition(position);
 			}
 		}
+	}
+	
+	public boolean isFinished() {
+		return finished;
 	}
 	
 	public void render(Graphics2D g) {
