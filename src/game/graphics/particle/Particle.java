@@ -1,6 +1,8 @@
 package game.graphics.particle;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 import game.math.Vector2f;
 
@@ -8,19 +10,19 @@ public class Particle {
 	private double lifetime;
 	private float speed;
 	private float size;
-	private float angle;
-	
+	private float rotation;
 	private Color color;
-	private Vector2f position;
+	
+	private Vector2f position;  // center position
 	private Vector2f velocity;
 	
 	private double lifetimeTimer = 0;
 	private double sizeTimer = 0;
 	
-	public Particle(double lifetime, float size, float angle, Vector2f position, Vector2f velocity) {
+	public Particle(double lifetime, float size, float rotation, Vector2f position, Vector2f velocity) {
 		this.lifetime = lifetime;
 		this.size = size;
-		this.angle = angle;
+		this.rotation = rotation;
 		
 		this.position = position;
 		this.velocity = velocity;
@@ -49,6 +51,15 @@ public class Particle {
 		}
 	}
 
+	public void draw(Graphics2D g, BufferedImage img) {
+		int x = (int)(position.x - img.getWidth() * size / 2);
+		int y = (int)(position.y - img.getHeight() * size / 2);
+		int w = (int)(img.getWidth() * size);
+		int h = (int)(img.getHeight() * size);
+		g.drawImage(img, x, y, w, h, null);
+	}
+	
+	// Getters and Setters
 	public double getLifetime() {
 		return lifetime;
 	}
@@ -73,12 +84,12 @@ public class Particle {
 		this.size = size;
 	}
 
-	public float getAngle() {
-		return angle;
+	public float getRotation() {
+		return rotation;
 	}
 
-	public void setAngle(float angle) {
-		this.angle = angle;
+	public void setRotation(float rotation) {
+		this.rotation = rotation;
 	}
 
 	public Color getColor() {

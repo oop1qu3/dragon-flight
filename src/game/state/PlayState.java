@@ -27,9 +27,11 @@ public class PlayState extends GameState {
 		enemies = new ArrayList<Enemy>();
 		bullets = new ArrayList<Bullet>();
 		
-		test = new Test(new Vector2f(50, 50));
+		tests = new ArrayList<Test>();
 	}
 
+	private double elapsed;
+	private ArrayList<Test> tests;
 	@Override
 	public void update(double dt) {
 		
@@ -49,8 +51,20 @@ public class PlayState extends GameState {
 			}
 	    }
 	    
-	    test.update(dt);
+	    elapsed += dt;
+		if (elapsed > 1) {
+			tests.clear();
+			
+			Test test = new Test(new Vector2f(100.0f, 100.0f));
+			tests.add(test);
 
+			elapsed = 0;
+		}
+		
+		for (Test t : tests) {
+			t.update(dt);
+		}
+	    
 	}
 
 	@Override
@@ -67,7 +81,9 @@ public class PlayState extends GameState {
 //			bullet.render(g);
 //		}
 		
-		test.render(g);
+		for (Test t : tests) {
+			t.render(g);
+		}
 	}
 
 	public ArrayList<Bullet> getBullets() {

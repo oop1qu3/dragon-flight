@@ -55,7 +55,6 @@ public class Player extends Entity {
 
 			elapsed = 0;
 		}
-
 	}
 
 	public void input(KeyHandler key, MouseHandler mouse) {

@@ -19,7 +19,7 @@ public class ParticleSystem {
 	
 	// Temp
 	private BufferedImage img;  // or Sprite
-	private Vector2f origin;
+	private Vector2f origin;  // center position
 	
 	private ArrayList<Particle> particles;
 
@@ -40,7 +40,11 @@ public class ParticleSystem {
 	
 	// Color over lifetime
 	// Size over lifetime
-	// Velocity over lifetime (later..)
+	
+	// Velocity over lifetime
+	private float limitSpeed;
+	private float dampen;
+	
 	// Rotation over lifetime
 	
 	public ParticleSystem(String imgPath, Vector2f origin) {
@@ -56,6 +60,10 @@ public class ParticleSystem {
 	
 	public void setStartLifetime(double start) {
 		startLifetime = new Range(start);
+	}
+	
+	public void setStartSpeed(float start) {
+		startSpeed = new Range(start);
 	}
 	
 	public void setStartSize(float start, float end) {
@@ -96,8 +104,9 @@ public class ParticleSystem {
 		for (int i = 0; i < burstsCount; i++) {
 			//
 			double lifetime = RandomUtil.nextDouble(startLifetime.start, startLifetime.end);
+			float speed = RandomUtil.nextFloat(startSpeed.start, startSpeed.end);
 			float size = RandomUtil.nextFloat(startSize.start, startSize.end);
-			float angle = RandomUtil.nextFloat(startRotation.start, startRotation.end);
+			float rotation = RandomUtil.nextFloat(startRotation.start, startRotation.end);
 			
 			//
 			float scale = RandomUtil.nextFloat(radius * (1 - radiusThickness), radius);
@@ -105,20 +114,16 @@ public class ParticleSystem {
 			Vector2f dPos = Vector2f.createRandom(scale);
 			Vector2f startPos = this.origin.add(dPos);
 			
-			Vector2f velocity = dPos.scale(0.01f);
+			Vector2f velocity = dPos.scale(speed);
 			
 			// add particle
-			Particle p = new Particle(lifetime, size, angle, startPos, velocity);
+			Particle p = new Particle(lifetime, size, rotation, startPos, velocity);
 			particles.add(p);
 		}
 	}
 	
 	public void play(double dt) {
 		if (initiated) {
-			for (Particle p : particles) {
-				p.updateTimer(dt);
-			}
-			
 			for (int i = particles.size() - 1; i >= 0; i--) {
 				Particle p = particles.get(i);
 				
@@ -128,12 +133,12 @@ public class ParticleSystem {
 			}
 			
 			for (Particle p : particles) {
+				p.updateTimer(dt);
+				p.setVelocity(p.getVelocity().scale(0.95f));
+				p.setSize(p.getSize() * 0.98f);
+				
 				Vector2f position = p.getPosition().add(p.getVelocity());
 				p.setPosition(position);
-				
-				if (p.isSizeTimerOver(0.01)) {
-					p.setSize(p.getSize() * 0.98f);
-				}
 			}
 		}
 	}
@@ -141,12 +146,7 @@ public class ParticleSystem {
 	public void render(Graphics2D g) {
 		if (initiated) {
 			for (int i = 0; i < particles.size(); i++) {
-				Particle p = particles.get(i);
-				
-				Vector2f pos = p.getPosition();
-				float size = p.getSize();
-				
-				g.drawImage(img, (int)pos.x, (int)pos.y, (int)size, (int)size, null);
+				particles.get(i).draw(g, img);
 			}
 		}
 	}

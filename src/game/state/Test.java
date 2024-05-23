@@ -2,6 +2,7 @@ package game.state;
 
 import java.awt.Graphics2D;
 
+import game.entity.EnemyDeathEffect;
 import game.math.Vector2f;
 
 public class Test {
