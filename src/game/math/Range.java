@@ -1,8 +1,8 @@
 package game.math;
 
 public class Range<T> {
-	private T start; 
-	private T end; 
+	public T start; 
+	public T end; 
 	
 	public Range(T start, T end) {
 		this.start = start;

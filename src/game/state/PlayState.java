@@ -30,8 +30,15 @@ public class PlayState extends GameState {
 		enemies = new ArrayList<Enemy>();		// @JW : Enemy 객체에 state 대입은 아래 spawn 메소드에서
 		spawn();
 		bullets = new ArrayList<Bullet>();
+<<<<<<< HEAD
+=======
+		
+		tests = new ArrayList<Test>();
+>>>>>>> develop
 	}
 
+	private double elapsed;
+	private ArrayList<Test> tests;
 	@Override
 	public void update(double dt) {
 		background.move(dt);
@@ -39,17 +46,14 @@ public class PlayState extends GameState {
 		player.move(dt);
 		player.fire(dt);
 		player.checkCollision(dt); // @YCW: pass dt to this for checking elapsed invincible time
-
-		for (int i = 0; i < bullets.size();) {
-			Bullet bullet = bullets.get(i);
-			bullet.move(dt);
-
-			if (bullet.isOut()) {
-				bullets.remove(bullet);
-				continue;
-			}
+		
+	    for (int i = bullets.size() - 1; i >= 0; i--) {
+            Bullet bullet = bullets.get(i);
+            bullet.move(dt);
             
-            ++i;
+            if (bullet.isOut()) {
+				bullets.remove(i);
+			}
 	    }
 
 		// @JW : enemies related

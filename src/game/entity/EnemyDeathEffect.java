@@ -1,4 +1,4 @@
-package game.state;
+package game.entity;
 
 import java.awt.Graphics2D;
 
@@ -15,15 +15,29 @@ public class EnemyDeathEffect {
 		enemyDeathCloud = new ParticleSystem("image/effect/enemyDeathCloud.png", origin);
 		enemyDeathGlow = new ParticleSystem("image/effect/enemyDeathGlow.png", origin);
 		
-		enemyDeathCloud.setStartLifetime(1.0);
-		enemyDeathCloud.setStartRotation(0, 360);
+		setEnemyDeathCloud();
+		setEnemyDeathGlow();
 		
-		enemyDeathCloud.setShape(new Circle(20.0));
+		enemyDeathCloud.init();
+		enemyDeathGlow.init();
+	}
+	
+	private void setEnemyDeathCloud() {
+		enemyDeathCloud.setStartLifetime(0.35);
+		enemyDeathCloud.setStartSpeed(0.15f);
+		enemyDeathCloud.setStartSize(0.3f, 1.0f);
+		enemyDeathCloud.setStartRotation(0, 360.0f);
+		
 		enemyDeathCloud.setEmission(8);
+		enemyDeathCloud.setShape(new Circle(8.0f, 0.8f));
+	}
+	
+	private void setEnemyDeathGlow() {
+		
 	}
 	
 	public void play(double dt) {
-		
+		enemyDeathCloud.play(dt);
 	}
 	
 	public void render(Graphics2D g) {
