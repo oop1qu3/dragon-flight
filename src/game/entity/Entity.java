@@ -28,5 +28,4 @@ public abstract class Entity {
 
 		this.hp = hp;
 	}
-    
 }
