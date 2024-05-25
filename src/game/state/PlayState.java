@@ -18,14 +18,14 @@ public class PlayState extends GameState {
 	private Player player;
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Bullet> bullets;
-	private ArrayList<Obstacle> obstacles;
+	private Obstacle obstacle;
 
 	// @JW : enemies spawn related, milliseconds.
 	private final int SPAWN_DELAY_E = 3000;
 	private long lastSpawnTime_E;
 
-	// @JW : obstacles spawn related, milliseconds.
-	private final int SPAWN_DELAY_O = 3000;
+	// @JW : obstacle trigger, milliseconds.
+	private final int SPAWN_DELAY_O = 7000;
 	private long lastSpawnTime_O;
 
 	public PlayState(GameStateManager gsm) {
@@ -38,7 +38,6 @@ public class PlayState extends GameState {
 
 		bullets = new ArrayList<Bullet>();
 
-		obstacles = new ArrayList<Obstacle>();
 		spawnO();
 	}
 
@@ -101,26 +100,15 @@ public class PlayState extends GameState {
 	public void spawnO() {
 		lastSpawnTime_O = System.currentTimeMillis();
 
-		int x = 0;
-		for (int i = 0; i < 5; i++)
-		{
-			if((int)(5 * Math.random()) == 1) {
-				Obstacle tempO = new Obstacle(x);
-				obstacles.add(tempO);
-			}
-
-			x += 78;
-		}
+		obstacle = new Obstacle(this, player.getX());
 	}
 	public void updateO(double dt) {
 		if (System.currentTimeMillis() - lastSpawnTime_O >= SPAWN_DELAY_O) {
-			obstacles.clear();
+
 			spawnO();
 		}
 
-		for(Obstacle o : obstacles)
-			if(o != null)
-				o.move(dt);
+		obstacle.move(dt);
 	}
 
 	@Override
@@ -142,11 +130,7 @@ public class PlayState extends GameState {
 				e.render(g);
 		}
 
-		for(Obstacle o : obstacles)
-		{
-			if (o != null)
-				o.render(g);
-		}
+		obstacle.render(g);
 	}
 
 	public ArrayList<Bullet> getBullets() {
@@ -157,8 +141,12 @@ public class PlayState extends GameState {
 		return enemies;
 	}
 
-	public ArrayList<Obstacle> getObstacles(){
-		return obstacles;
+	public Obstacle getObstacle(){
+		return obstacle;
+	}
+
+	public Player getPlayer() {
+		return player;
 	}
 
 }

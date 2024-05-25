@@ -18,7 +18,6 @@ public class Player extends Entity {
 	public static ImageIcon player = new ImageIcon("image/player.png");
 	public static ImageIcon player_inv = new ImageIcon("image/player_inv.gif");
 
-
 	private GameState state;
 	private int hp;
 	private int speed;
@@ -40,14 +39,14 @@ public class Player extends Entity {
 	}
 
 	public void move(double dt) {
-	//	if (isInvincible == false) {
-			if (left) {
-				x -= this.speed * dt;
-			}
-			if (right) {
-				x += this.speed * dt;
-			}
-	//	}
+		//	if (isInvincible == false) {
+		if (left) {
+			x -= this.speed * dt;
+		}
+		if (right) {
+			x += this.speed * dt;
+		}
+		//	}
 	}
 	public void fire(double dt) {
 		if (isInvincible == false) {
@@ -79,22 +78,10 @@ public class Player extends Entity {
 		}
 	}
 
-	public void render(Graphics2D g) {
-		//		if (!isInvincible)
-		//			g.drawImage(Resource.player, (int) x, (int) y, width, height, null);
-		//		else
-		//			g.drawImage(Resource.player, (int) x, (int) y, width, height, null);
-
-		if (!isInvincible)
-			player.paintIcon(null,g,(int)x,(int)y);
-		else
-			player_inv.paintIcon(null,g,(int)x,(int)y);
-	}
-
 	// @YCW: add checkColision for interaction between Character and Enemy ( + Character and Obstacle )
 	public void checkCollision(double dt) {
 		ArrayList<Enemy> enemies = ((PlayState)state).getEnemies();
-		ArrayList<Obstacle> obstacles = ((PlayState)state).getObstacles();
+		Obstacle obstacle = ((PlayState)state).getObstacle();
 
 		for(int i = 0; i < enemies.size(); i++)
 			if((abs((this.x + this.width / 2) - (enemies.get(i).getX() + this.width / 2)) < (enemies.get(i).getWidth() / 2 + this.width / 2) &&
@@ -104,14 +91,13 @@ public class Player extends Entity {
 				isCollision = true;
 			}
 
-		for(int i = 0; i < obstacles.size();i++)
-			if(obstacles.get(i) != null)
-				if((abs (this.x - obstacles.get(i).getX()) <= 50) &&
-						((obstacles.get(i).hitY() <= this.y) && (obstacles.get(i).hitY() + 20 >= this.y)) &&
-						isInvincible == false)
-				{
-					isCollision = true;
-				}
+		if(obstacle != null)
+			if((abs (this.x - obstacle.getX()) <= 50) &&
+					((obstacle.hitY() <= this.y) && (obstacle.hitY() + 20 >= this.y)) &&
+					isInvincible == false)
+			{
+				isCollision = true;
+			}
 
 		if (isCollision == true) {
 			hp = hp - 1;
@@ -127,6 +113,13 @@ public class Player extends Entity {
 				elapsedInvincibleTime = 0;
 			}
 		}
+	}
+
+	public void render(Graphics2D g) {
+		if (!isInvincible)
+			player.paintIcon(null,g,(int)x,(int)y);
+		else
+			player_inv.paintIcon(null,g,(int)x,(int)y);
 	}
 
 	// @YCW: add getX for x position of bullet
