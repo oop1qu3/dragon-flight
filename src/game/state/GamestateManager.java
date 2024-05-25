@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
 
-public class GameStateManager {
+public class GamestateManager {
 
-	private GameState state;
+	private State state;
 
-	public GameStateManager() {
-		state = new PlayState(this);
+	public GamestateManager() {
+		state = new Playing(this);
 	}
 
 	public void update(double dt) {
@@ -26,11 +26,11 @@ public class GameStateManager {
 		state.render(g);
 	}
 
-	public void setState(GameState state) {
+	public void setState(State state) {
 		this.state = state;
 	}
 
-	public GameState getState() {
+	public State getState() {
 		return state;
 	}
 

@@ -5,11 +5,11 @@ import java.awt.Graphics2D;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
 
-public abstract class GameState {
+public abstract class State {
 
-	protected GameStateManager gsm;
+	protected GamestateManager gsm;
 
-	public GameState(GameStateManager gsm) {
+	public State(GamestateManager gsm) {
 		this.gsm = gsm;
 	}
 

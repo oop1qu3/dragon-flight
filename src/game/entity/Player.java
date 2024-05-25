@@ -8,15 +8,15 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import game.state.GameState;
-import game.state.PlayState;
+import game.state.State;
+import game.state.Playing;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
 
 public class Player extends Entity {
 
 	private BufferedImage img;
-	private GameState state;
+	private State state;
 	private int hp;
 	private int speed;
 
@@ -28,7 +28,7 @@ public class Player extends Entity {
 	private boolean isCollision = false;
 	private boolean isInvincible = false;
 
-	public Player(GameState state) {
+	public Player(State state) {
 		super((384 - 80) / 2, 512 - 100, 80, 80); // FIXME @YDH : 상수 선언
 		
 		try {
@@ -57,7 +57,7 @@ public class Player extends Entity {
 			elapsed += dt;
 			if (elapsed > bulletPeriod) {
 				Bullet bullet = new Bullet((int) x);
-				((PlayState) state).getBullets().add(bullet);
+				((Playing) state).getBullets().add(bullet);
 
 				elapsed = 0;
 			}
@@ -89,7 +89,7 @@ public class Player extends Entity {
 
 	// @YCW: add checkColision for interaction between Character and Enemy
 	public void checkCollision(double dt) {
-		ArrayList<Enemy> enemies = ((PlayState)state).getEnemies();
+		ArrayList<Enemy> enemies = ((Playing)state).getEnemies();
 
 		for(int i = 0; i < enemies.size(); i++) {
 			if(Math.abs((this.x + this.width / 2) - (enemies.get(i).getX() + this.width / 2)) < (enemies.get(i).getWidth() / 2 + this.width / 2) &&

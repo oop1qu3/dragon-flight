@@ -2,17 +2,18 @@ package game.state;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Collections;
 
-import game.effect.Effect;
 import game.entity.Bullet;
 import game.entity.Enemy;
 import game.entity.Player;
-import game.map.Background;
+import game.entity.effect.Effect;
+import game.entity.map.Background;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
 
 
-public class PlayState extends GameState {
+public class Playing extends State {
 
 	private Background background;
 	private Player player;
@@ -24,7 +25,7 @@ public class PlayState extends GameState {
 	private final int SPAWN_DELAY = 3000;
 	private long lastSpawnTime;
 
-	public PlayState(GameStateManager gsm) {
+	public Playing(GamestateManager gsm) {
 		super(gsm);
 		background = new Background();
 		player = new Player(this);
@@ -41,11 +42,16 @@ public class PlayState extends GameState {
 		player.fire(dt);
 		player.checkCollision(dt); // @YCW: pass dt to this for checking elapsed invincible time
 		
+		/*	@YDH : 
+		 *	for each문은 remove 시 ConcurrentModificationException 에러 발생
+		 *	따라서 for문을 사용하되, remove 시에 인덱스가 밀려나므로
+		 *	size-1부터 0까지 감소하는 방향으로 순회하면 된다. 
+		 */ 		
 	    for (int i = bullets.size() - 1; i >= 0; i--) {
-            Bullet bullet = bullets.get(i);
-            bullet.move(dt);
+            Bullet b = bullets.get(i);
+            b.move(dt);
             
-            if (bullet.isOut()) {
+            if (b.isOut()) {
 				bullets.remove(i);
 			}
 	    }
@@ -70,14 +76,15 @@ public class PlayState extends GameState {
 			}
 		}
 		
-		for (Effect e : effects)
-			e.play(dt);
-		
 		for (int i = effects.size() - 1; i >= 0; i--) {
 			Effect e = effects.get(i);
 			
+			e.play(dt);
+			
 			if (e.isFinished()) {
-				effects.remove(i);
+				// @YDH : 최적화 작업 ( O(n) -> O(1) )
+				Collections.swap(effects, i, effects.size() - 1);
+				effects.remove(effects.size()-1);
 			}
 		}
 	}
@@ -88,8 +95,8 @@ public class PlayState extends GameState {
 		int x = 0;
 		for(int i = 0 ; i < 5; i++)
 		{
-			Enemy tempE = new Enemy(x, this);
-			enemies.add(tempE);
+			Enemy e = new Enemy(x, this);
+			enemies.add(e);
 			x += 78;
 		}
 	}
@@ -104,14 +111,17 @@ public class PlayState extends GameState {
 		background.render(g);
 		player.render(g);
 
-		for(Bullet b: bullets)
-			b.render(g);
-
-		for(Enemy e : enemies)
-			e.render(g);
+		for (int i = bullets.size() - 1; i >= 0; i--) {
+			bullets.get(i).render(g);
+		}
 		
-		for (Effect e : effects) 
-			e.render(g);
+		for (int i = enemies.size() - 1; i >= 0; i--) {
+			enemies.get(i).render(g);
+		}
+		
+		for (int i = effects.size() - 1; i >= 0; i--) {
+			effects.get(i).render(g);
+		}
 	}
 
 	public ArrayList<Bullet> getBullets() {

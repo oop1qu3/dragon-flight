@@ -8,11 +8,11 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
-import game.effect.Effect;
-import game.effect.EnemyDeathEffect;
+import game.entity.effect.Effect;
+import game.entity.effect.EnemyDeathEffect;
 import game.math.Vector2f;
-import game.state.GameState;
-import game.state.PlayState;
+import game.state.State;
+import game.state.Playing;
 
 public class Enemy extends Entity {
 
@@ -21,9 +21,9 @@ public class Enemy extends Entity {
     private double speed;
 
     // FIXME
-    private GameState state;
+    private State state;
 
-    public Enemy(int x, GameState state) {
+    public Enemy(int x, State state) {
         super(x, -70, 60, 60, 100);      // @JW 사이즈 조절?
         this.speed = 3;
 
@@ -43,7 +43,7 @@ public class Enemy extends Entity {
     }
 
     public void enemyHit(){
-        ArrayList<Bullet> bullets = ((PlayState)state).getBullets();
+        ArrayList<Bullet> bullets = ((Playing)state).getBullets();
 
         // @JW : 좌표 범위내에 들어오면
         for(int i = 0; i < bullets.size(); i++)
@@ -56,7 +56,7 @@ public class Enemy extends Entity {
     	int x = (int)(this.x + this.width / 2);
     	int y = (int)(this.y + this.height / 2);
     	Effect deathEffect = new EnemyDeathEffect(new Vector2f(x, y));
-    	((PlayState)state).getEffects().add(deathEffect);
+    	((Playing)state).getEffects().add(deathEffect);
     }
 
     public void render(Graphics g) {

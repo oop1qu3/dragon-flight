@@ -1,4 +1,4 @@
-package game.map;
+package game.entity.map;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;

@@ -1,4 +1,4 @@
-package game.effect;
+package game.entity.effect;
 
 import java.awt.Graphics2D;
 

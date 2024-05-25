@@ -1,9 +1,10 @@
-package game.effect;
+package game.entity.effect;
 
 import java.awt.Graphics2D;
 
 import game.graphics.particle.ParticleSystem;
 import game.graphics.particle.shape.Circle;
+import game.graphics.particle.shape.Mesh;
 import game.math.Vector2f;
 
 public class EnemyDeathEffect extends Effect {
@@ -33,23 +34,27 @@ public class EnemyDeathEffect extends Effect {
 	}
 	
 	private void setEnemyDeathGlow() {
+		enemyDeathGlow.setStartLifetime(0.2);
 		
+		enemyDeathGlow.setShape(new Mesh());
+		//enemyDeathGlow.setColorOverLifetime();
 	}
 	
 	@Override
 	public boolean isFinished() {
-		return enemyDeathCloud.isFinished();
+		return enemyDeathCloud.isFinished() && enemyDeathGlow.isFinished();
 	}
 	
 	@Override
 	public void play(double dt) {
 		enemyDeathCloud.play(dt);
+		enemyDeathGlow.play(dt);
 	}
 	
 	@Override
 	public void render(Graphics2D g) {
 		enemyDeathCloud.render(g);
-		// enemyDeathGlow.render(g);
+		enemyDeathGlow.render(g);
 	}
 	
 }

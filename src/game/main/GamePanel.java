@@ -9,8 +9,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import game.state.GameStateManager;
-import game.state.PlayState;
+import game.state.GamestateManager;
+import game.state.Playing;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
 
@@ -28,7 +28,7 @@ public class GamePanel extends JPanel implements Runnable {
 	private MouseHandler mouse;
 	private KeyHandler key;
 
-	private GameStateManager gsm;
+	private GamestateManager gsm;
 
 	public GamePanel(int width, int height) {
 		GamePanel.width = width;
@@ -126,7 +126,7 @@ public class GamePanel extends JPanel implements Runnable {
 		addKeyListener(key);
 		addMouseListener(mouse);
 
-		gsm = new GameStateManager();
+		gsm = new GamestateManager();
 	}
 	
 	public void initGraphics() {
