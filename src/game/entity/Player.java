@@ -1,9 +1,13 @@
 package game.entity;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
-import game.main.Resource;
+import javax.imageio.ImageIO;
+
 import game.state.GameState;
 import game.state.PlayState;
 import game.util.KeyHandler;
@@ -32,7 +36,6 @@ public class Player extends Entity {
 
 	public Player(GameState state) {
 		super((384 - 80) / 2, 512 - 100, 50, 50); // FIXME @YDH : 상수 선언
-
 		this.hp = 3; // @YCW: default hp value = 3
 		this.speed = 500;
 		this.state = state;

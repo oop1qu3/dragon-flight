@@ -3,6 +3,7 @@ package game.state;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+import game.effect.Effect;
 import game.entity.Bullet;
 import game.entity.Enemy;
 import game.entity.Obstacle;
@@ -19,6 +20,7 @@ public class PlayState extends GameState {
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Bullet> bullets;
 	private Obstacle obstacle;
+	private ArrayList<Effect> effects;
 
 	// @JW : enemies spawn related, milliseconds.
 	private final int SPAWN_DELAY_E = 3000;
@@ -35,10 +37,9 @@ public class PlayState extends GameState {
 
 		enemies = new ArrayList<Enemy>();		// @JW : Enemy 객체에 state 대입은 아래 spawn 메소드에서
 		spawnE();
-
-		bullets = new ArrayList<Bullet>();
-
 		spawnO();
+		bullets = new ArrayList<Bullet>();
+		effects = new ArrayList<Effect>();
 	}
 
 	@Override
@@ -67,20 +68,33 @@ public class PlayState extends GameState {
 	}
 	public void updateE(double dt) {
 		if (System.currentTimeMillis() - lastSpawnTime_E >= SPAWN_DELAY_E){
-
 			if(enemies.isEmpty())
 				spawnE();
 
 			enemies.clear();
 			spawnE();
 		}
-		for (int i = 0; i < enemies.size(); i++) {
+		
+		for (int i = enemies.size() - 1; i >= 0; i--) {
 			enemies.get(i).enemyHit();
 
-			if (enemies.get(i).isAlive())
+			if (enemies.get(i).isAlive()) {
 				enemies.get(i).move(dt);
-			else
+			} else {
+				enemies.get(i).dead();
 				enemies.remove(i);
+			}
+		}
+		
+		for (Effect e : effects)
+			e.play(dt);
+		
+		for (int i = effects.size() - 1; i >= 0; i--) {
+			Effect e = effects.get(i);
+			
+			if (e.isFinished()) {
+				effects.remove(i);
+			}
 		}
 	}
 
@@ -131,6 +145,9 @@ public class PlayState extends GameState {
 		}
 
 		obstacle.render(g);
+		
+		for (Effect e : effects) 
+			e.render(g);
 	}
 
 	public ArrayList<Bullet> getBullets() {
@@ -148,6 +165,9 @@ public class PlayState extends GameState {
 	public Player getPlayer() {
 		return player;
 	}
-
+	
+	public ArrayList<Effect> getEffects(){
+		return effects;
+	}
 }
 
