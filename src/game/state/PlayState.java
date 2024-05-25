@@ -53,6 +53,8 @@ public class PlayState extends GameState {
 		updateE(dt);	// Enemy
 		updateB(dt);	// Bullet
 		updateO(dt);	// Obstacle
+		
+		isGameOver(); // @YCW: check isGameOver for changing states
 	}
 
 	public void spawnE() {
@@ -148,6 +150,13 @@ public class PlayState extends GameState {
 		
 		for (Effect e : effects) 
 			e.render(g);
+	}
+	
+	// @YCW: added below function for changing state to EndState when the player is dead
+	public void isGameOver() {
+		if (player.isDead() == true) {
+			gsm.setState(new EndState(gsm));
+		}
 	}
 
 	public ArrayList<Bullet> getBullets() {
