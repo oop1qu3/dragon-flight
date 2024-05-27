@@ -69,6 +69,10 @@ public class ParticleSystem {
 		startSpeed = new Range<Float>(start);
 	}
 	
+	public void setStartSize(float start) {
+		startSize = new Range<Float>(start);
+	}
+	
 	public void setStartSize(float start, float end) {
 		startSize = new Range<Float>(start, end);
 	}
@@ -94,7 +98,7 @@ public class ParticleSystem {
 		
 		if (shape instanceof Circle) {
 			initCircle();
-		}
+		} 
 		
 		particleTimer = 0;
 		initiated = true;
@@ -126,6 +130,13 @@ public class ParticleSystem {
 		}
 	}
 	
+	private void initMesh() {
+		double lifetime = RandomUtil.nextDouble(startLifetime.start, startLifetime.end);
+		
+		//Particle p = new Particle(lifetime, origin, new Color(255, 200, 200, 100));
+		//particles.add(p);
+	}
+	
 	public void play(double dt) {
 		if (initiated) {
 			particleTimer += dt;
@@ -134,21 +145,40 @@ public class ParticleSystem {
 				finished = true;
 			}
 			
-			for (int i = particles.size() - 1; i >= 0; i--) {
-				Particle p = particles.get(i);
-				
-				if (p.isLifetimeTimerOver(p.getLifetime())) {
-					particles.remove(i);
-				}
-			}
+			if (shape instanceof Circle) {
+				updateCircle(dt);
+			} 
+		}
+	}
+	
+	private void updateCircle(double dt) {
+		for (int i = particles.size() - 1; i >= 0; i--) {
+			Particle p = particles.get(i);
 			
-			for (Particle p : particles) {
-				p.updateTimer(dt);
-				p.setVelocity(p.getVelocity().scale(0.95f));
-				p.setSize(p.getSize() * 0.98f);
-				
-				Vector2f position = p.getPosition().add(p.getVelocity());
-				p.setPosition(position);
+			p.updateTimer(dt);
+			p.setVelocity(p.getVelocity().scale(0.95f));
+			p.setSize(p.getSize() * 0.98f);
+			
+			Vector2f position = p.getPosition().add(p.getVelocity());
+			p.setPosition(position);
+			
+			if (p.isLifetimeTimerOver(p.getLifetime())) {
+				particles.remove(i);
+			}
+		}
+	}
+	
+	private void updateMesh(double dt) {
+		for (int i = particles.size() - 1; i >= 0; i--) {
+			Particle p = particles.get(i);
+			
+			p.updateTimer(dt);
+			
+			//Color color = p.getColor();
+			//p.setColor(color);
+			
+			if (p.isLifetimeTimerOver(p.getLifetime())) {
+				particles.remove(i);
 			}
 		}
 	}
@@ -160,6 +190,11 @@ public class ParticleSystem {
 	public void render(Graphics2D g) {
 		if (initiated) {
 			for (int i = 0; i < particles.size(); i++) {
+//				if (shape instanceof Mesh) {
+//					Particle p = particles.get(i);
+//					BufferedImage newImg = ImageUtil.applyColorFilter(img, p.getColor(), 0f, 0f);
+//					//p.draw(g, newImg);
+//				}
 				particles.get(i).draw(g, img);
 			}
 		}
