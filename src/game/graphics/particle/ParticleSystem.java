@@ -137,8 +137,8 @@ public class ParticleSystem {
 	private void initMesh() {
 		double lifetime = RandomUtil.nextDouble(startLifetime.start, startLifetime.end);
 		
-		Particle p = new Particle(lifetime, origin, new Color(255, 200, 200, 100));
-		particles.add(p);
+		//Particle p = new Particle(lifetime, origin, new Color(255, 200, 200, 100));
+		//particles.add(p);
 	}
 	
 	public void play(double dt) {
@@ -196,12 +196,11 @@ public class ParticleSystem {
 	public void render(Graphics2D g) {
 		if (initiated) {
 			for (int i = 0; i < particles.size(); i++) {
-				if (shape instanceof Mesh) {
-					Particle p = particles.get(i);
-					BufferedImage newImg = ImageUtil.applyColorFilter(img, p.getColor(), 0f, 0f);
-					p.draw(g, newImg);
-					continue;
-				}
+//				if (shape instanceof Mesh) {
+//					Particle p = particles.get(i);
+//					BufferedImage newImg = ImageUtil.applyColorFilter(img, p.getColor(), 0f, 0f);
+//					//p.draw(g, newImg);
+//				}
 				particles.get(i).draw(g, img);
 			}
 		}

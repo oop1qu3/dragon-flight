@@ -11,7 +11,8 @@ public class GamestateManager {
 	private State state;
 
 	public GamestateManager() {
-		state = new Playing(this);
+//		state = new PlayState(this);
+		state = new Intro(this);
 	}
 
 	public void update(double dt) {
@@ -34,4 +35,5 @@ public class GamestateManager {
 		return state;
 	}
 
+	// PR test
 }
