@@ -1,10 +1,12 @@
 package game.state;
 
-import static game.util.Constant.EntityConstant.*;
+import static game.util.Constant.EntityConstant.BACKGROUND;
+import static game.util.Constant.EntityConstant.EFFECT;
+import static game.util.Constant.EntityConstant.ENEMY;
+import static game.util.Constant.EntityConstant.PLAYER;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import game.entity.Bullet;
@@ -16,18 +18,20 @@ import game.entity.effect.Effect;
 import game.entity.map.Background;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
+import game.util.Timer;
 
 public class Playing extends State {
 
-	// @JW : enemies spawn related, milliseconds.
-	private final int SPAWN_DELAY_E = 3000;
-	private long lastSpawnTime_E;
+	private Timer spawnEnemiesTimer;
 
 	// @JW : obstacle trigger, milliseconds.
 	private final int SPAWN_DELAY_O = 7000;
 	private long lastSpawnTime_O;
 
 	public Playing() {
+		
+		spawnEnemiesTimer = new Timer(3.0);
+		
 		entities = new ArrayList<>();
 		
 		for (int i = 0; i < 6; i++) {
@@ -43,7 +47,7 @@ public class Playing extends State {
 		
 		entities.set(BACKGROUND, backgrounds);
 		entities.set(PLAYER, players);
-		//entities.set(ENEMY, enemies);
+		entities.set(ENEMY, enemies);
 		//entities.set(BULLET, bullets);
 		entities.set(EFFECT, effects);
 		//entities.set(OBSTACLE, obstacles);
@@ -54,12 +58,11 @@ public class Playing extends State {
 
 	@Override
 	public void update(double dt) {
-//		background.move(dt);
-//
-//		player.move(dt);
-//		player.fire(dt);
-//		player.checkCollision(dt); // @YCW: pass dt to this for checking elapsed invincible time
-//
+		
+		if (spawnEnemiesTimer.isOver()) {
+			spawnEnemies();
+		}
+		
 		for (List<? extends Entity> entity : entities) {
 			if (entity == null) continue;
 			for (int i = entity.size()-1; i >= 0; i--) {
@@ -67,62 +70,34 @@ public class Playing extends State {
 			}
 		}
 		
-		updateEnemies(dt);	
 		updateBullets(dt);	
-		updateObstacle(dt);	
-		
-		/*	@YDH : 
-		 *	for each문은 remove 시 ConcurrentModificationException 에러 발생
-		 *	따라서 for문을 사용하되, remove 시에 인덱스가 당겨지므로
-		 *	size-1부터 0까지 감소하는 방향으로 순회하면 된다. 
-		 */
+		updateObstacle(dt);
 		
 		if(isGameover()) {
 			gsm.state = new Gameover();
 		}
-	}
-
-	public void spawnEnemies() {
-		lastSpawnTime_E = System.currentTimeMillis();
-
-		int x = 0;
-		for(int i = 0 ; i < 5; i++)
-		{
-			enemies.add(new Enemy(x, this));
-			x += 78;
-		}
+		
 	}
 	
-	public void updateEnemies(double dt) {
-		if (System.currentTimeMillis() - lastSpawnTime_E >= SPAWN_DELAY_E){
-			if(enemies.isEmpty())
-				spawnEnemies();
-
-			enemies.clear();
-			spawnEnemies();
-		}
+	// @YCW: added below function for changing state to EndState when the player is dead
+	public boolean isGameover() {
+		boolean isAllDead = true;
 		
-		for (int i = enemies.size() - 1; i >= 0; i--) {
-			enemies.get(i).enemyHit();
-
-			if (enemies.get(i).isAlive()) {
-				enemies.get(i).move(dt);
-			} else {
-				enemies.get(i).dead();
-				enemies.remove(i);
+		for (Player p : players) {
+			if (!p.isDead()) {
+				isAllDead = false;
 			}
 		}
 		
-		for (int i = effects.size() - 1; i >= 0; i--) {
-			Effect e = effects.get(i);
-			
-			e.update(dt);
-			
-			if (e.isFinished()) {
-				// @YDH : 최적화 작업 ( O(n) -> O(1) )
-				Collections.swap(effects, i, effects.size() - 1);
-				effects.remove(effects.size()-1);
-			}
+		return isAllDead;
+	}
+	
+	public void spawnEnemies() {
+		int x = 0;
+		
+		for(int i = 0 ; i < 5; i++) {
+			enemies.add(new Enemy(x));
+			x += 78;
 		}
 	}
 
@@ -183,19 +158,6 @@ public class Playing extends State {
 			obstacles.get(i).render(g);
 		}
 		
-	}
-	
-	// @YCW: added below function for changing state to EndState when the player is dead
-	public boolean isGameover() {
-		boolean isAllDead = true;
-		
-		for (Player p : players) {
-			if (!p.isDead()) {
-				isAllDead = false;
-			}
-		}
-		
-		return isAllDead;
 	}
 	
 }

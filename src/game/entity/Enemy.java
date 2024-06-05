@@ -5,6 +5,7 @@ import static java.lang.Math.abs;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -21,19 +22,50 @@ public class Enemy extends Entity {
 
     private double speed;
 
-    // FIXME
-    private State state;
-
-    public Enemy(int x, State state) {
+    public Enemy(int x) {
         super(x, -70, 60, 60, 100);      // @JW 사이즈 조절?
-        this.speed = 3;
-
-        this.state = state;
+        this.speed = 300;
     }
 
-    public void move(double dt) {
-        y += this.speed * (dt * 100);
+    @Override
+	public void update(double dt) {
+    	System.out.println("e");
+    	List<Enemy> enemies = gsm.state.getEnemies();
+        List<Bullet> bullets = gsm.state.getBullets();
+        
+        // @JW : 좌표 범위내에 들어오면
+        // FIXME @YDH : if(isInHitbox()) {hit()} 으로 처리
+    	for(Bullet b : bullets) {
+            if((abs (x - b.getX()) <= 40) && (abs (y - b.getY()) <= 40)) {
+            	hit();
+            }
+    	}
+    	
+    	if (isAlive()) {
+			move(dt);
+		} else {
+			dead();
+			enemies.remove(this);
+		}
+    	
+	}
+    
+    private void hit(){
+        getDamage();
     }
+    
+    private void getDamage() {
+    	hp -= 50;
+    }
+    
+    private void move(double dt) {
+        y += this.speed * dt;
+    }
+
+	@Override
+	public void render(Graphics2D g) {
+        enemy.paintIcon(null, g, (int)x, (int)y);
+	}
 
     public boolean isAlive(){
         return this.hp > 0;
@@ -42,22 +74,12 @@ public class Enemy extends Entity {
     public boolean isOut(){     // FIXME
         return this.y > HEIGHT;
     }
-
-    public void enemyHit(){
-        List<Bullet> bullets = gsm.state.getBullets();
-
-        // @JW : 좌표 범위내에 들어오면
-        for(int i = 0; i < bullets.size(); i++)
-            if((abs (x - bullets.get(i).getX()) <= 40) &&
-                    (abs (y - bullets.get(i).getY()) <= 40))
-                this.hp -= bullets.get(i).getDam();
-    }
     
     public void dead() {
     	int x = (int)(this.x + this.width / 2);
     	int y = (int)(this.y + this.height / 2);
     	Effect deathEffect = new EnemyDeathEffect(new Vector2f(x, y));
-    	((Playing)state).getEffects().add(deathEffect);
+    	gsm.state.getEffects().add(deathEffect);
     }
 
     public double getX(){
@@ -76,15 +98,5 @@ public class Enemy extends Entity {
     public int getHeight() {
         return this.height;
     }
-
-	@Override
-	public void update(double dt) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void render(Graphics2D g) {
-        enemy.paintIcon(null, g, (int)x, (int)y);
-	}
+    
 }

@@ -6,15 +6,16 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
-import game.state.Gameover;
 import game.state.GamestateManager;
 import game.state.Intro;
-import game.state.Playing;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
+import game.util.Timer;
 
 public class GamePanel extends JPanel implements Runnable {
 	
@@ -31,6 +32,8 @@ public class GamePanel extends JPanel implements Runnable {
 	private KeyHandler key;
 	
 	private GamestateManager gsm;
+	
+	private List<Timer> timers;
 
 	public GamePanel(int width, int height) {
 		GamePanel.width = width;
@@ -127,6 +130,8 @@ public class GamePanel extends JPanel implements Runnable {
 
 		gsm = GamestateManager.getInstance();
 		gsm.state = new Intro();
+		
+		timers = new ArrayList<Timer>();
 	}
 	
 	public void initGraphics() {
@@ -136,6 +141,10 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	public void update(double dt) {
+		for (Timer t : timers) {
+			t.update(dt);
+		}
+		
 		gsm.update(dt);
 	}
 
