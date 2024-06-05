@@ -9,7 +9,9 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import game.state.Gameover;
 import game.state.GamestateManager;
+import game.state.Intro;
 import game.state.Playing;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
@@ -27,7 +29,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 	private MouseHandler mouse;
 	private KeyHandler key;
-
+	
 	private GamestateManager gsm;
 
 	public GamePanel(int width, int height) {
@@ -119,14 +121,12 @@ public class GamePanel extends JPanel implements Runnable {
 
 		key = new KeyHandler(); 
 		mouse = new MouseHandler(); 
-		
-		key = new KeyHandler();
-		mouse = new MouseHandler();
 
 		addKeyListener(key);
 		addMouseListener(mouse);
 
-		gsm = new GamestateManager();
+		gsm = GamestateManager.getInstance();
+		gsm.state = new Intro();
 	}
 	
 	public void initGraphics() {
@@ -147,7 +147,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public void paintComponent(Graphics g2) {
 		super.paintComponent(g2);
 		
-		// Drawing onto an off-screen image for double buffering 
+		// Drawing onto an off-screen image (for double buffering)
 		g.setColor(new Color(200, 255, 200));
 		g.fillRect(0, 0, width, height);
 		gsm.render(g);

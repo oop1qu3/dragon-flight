@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 
 public class ImageUtil {
     public static BufferedImage rotateImage(BufferedImage originalImage, double angle) {
@@ -51,5 +52,15 @@ public class ImageUtil {
     
     private static int clamp(int value) {
         return Math.max(0, Math.min(255, value));
+    }
+    
+    public static BufferedImage processImage(BufferedImage image, float alpha) {
+    	BufferedImage nbi = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+    	float[] scales = { 1f, 1f, 1f, alpha };
+    	float[] offsets = new float[4];
+    	RescaleOp rop = new RescaleOp(scales, offsets, null);
+    	BufferedImage filtered = rop.filter(nbi, null);
+    	
+    	return filtered;
     }
 }

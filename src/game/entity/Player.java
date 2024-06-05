@@ -3,10 +3,11 @@ package game.entity;
 import static java.lang.Math.abs;
 
 import java.awt.Graphics2D;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 
+import game.state.GamestateManager;
 import game.state.Playing;
 import game.state.State;
 import game.util.KeyHandler;
@@ -16,13 +17,11 @@ public class Player extends Entity {
 
 	public static ImageIcon player = new ImageIcon("image/player.png");
 	public static ImageIcon player_inv = new ImageIcon("image/player_inv.gif");
-
-	private State state;
 	
 	private int hp;
 	private int speed;
 
-	private double bulletPeriod = 0.08; // 80ms
+	private double firePeriod = 0.08; // 80ms
 	private double elapsed = 0;
 
 	private int invincibleTime = 1; // @YCW: current invincible time is 2 seconds, enemy에게 맞으면 발동
@@ -30,33 +29,29 @@ public class Player extends Entity {
 	private boolean isCollision = false;
 	private boolean isInvincible = false;
 
-	public Player(State state) {
+	public Player() {
 		super((384 - 80) / 2, 512 - 100, 50, 50); // FIXME @YDH : 상수 선언
-		this.hp = 3; // @YCW: default hp value = 3
+		this.hp = 2; // @YCW: default hp value = 2
 		this.speed = 500;
-		this.state = state;
 	}
 
 	public void move(double dt) {
-		//	if (isInvincible == false) {
 		if (left) {
 			x -= this.speed * dt;
 		}
 		if (right) {
 			x += this.speed * dt;
 		}
-		//	}
 	}
 	
+	
 	public void fire(double dt) {
-		if (isInvincible == false) {
-			elapsed += dt;
-			if (elapsed > bulletPeriod) {
-				Bullet bullet = new Bullet((int) x);
-				((Playing) state).getBullets().add(bullet);
+		elapsed += dt;
+		if (elapsed > firePeriod) {
+			Bullet b = new Bullet((int) x);
+			gsm.state.getBullets().add(b);
 
-				elapsed = 0;
-			}
+			elapsed = 0;
 		}
 	}
 
@@ -68,32 +63,36 @@ public class Player extends Entity {
 
 		if (centerX <= 5) {
 			x = 5 - 40;
-			left = false;
-			if (key.left.pressed && key.right.pressed) right = false;
+			if (left && right) {}
+			else left = false;
 		}
 		if (centerX >= 384 - 5) { // FIXME @YDH : 상수 선언
 			x = 384 - 5 - 40;
-			right = false;
-			if (key.left.pressed && key.right.pressed) left = false;
+			if (left && right) {}
+			else right = false;
 		}
 	}
 
 	// @YCW: add checkColision for interaction between Character and Enemy ( + Character and Obstacle )
 	public void checkCollision(double dt) {
-		ArrayList<Enemy> enemies = ((Playing)state).getEnemies();
-		Obstacle obstacle = ((Playing)state).getObstacle();
+		List<Enemy> enemies = gsm.state.getEnemies();
+		List<Obstacle> obstacles = gsm.state.getObstacles();
 
-		for(int i = 0; i < enemies.size(); i++)
-			if((abs((this.x + this.width / 2) - (enemies.get(i).getX() + this.width / 2)) < (enemies.get(i).getWidth() / 2 + this.width / 2) &&
-					abs((this.y + this.height / 2) - (enemies.get(i).getY() + enemies.get(i).getHeight() / 2)) < (enemies.get(i).getHeight() / 2 + this.height / 2)) &&
+		for(int i = 0; i < enemies.size(); i++) {
+			Enemy e = enemies.get(i);
+			
+			if((abs((this.x + this.width / 2) - (e.getX() + this.width / 2)) < (e.getWidth() / 2 + this.width / 2) &&
+					abs((this.y + this.height / 2) - (e.getY() + e.getHeight() / 2)) < (e.getHeight() / 2 + this.height / 2)) &&
 					isInvincible == false)
 			{
 				isCollision = true;
 			}
+		}
 
-		if(obstacle != null)
-			if((abs (this.x - obstacle.getX()) <= 50) &&
-					((obstacle.hitY() <= this.y) && (obstacle.hitY() + 20 >= this.y)) &&
+		for(int i = 0; i < obstacles.size(); i++)
+		if(obstacles.get(i) != null)
+			if((abs (this.x - obstacles.get(i).getX()) <= 50) &&
+					((obstacles.get(i).hitY() <= this.y) && (obstacles.get(i).hitY() + 20 >= this.y)) &&
 					isInvincible == false)
 			{
 				isCollision = true;
@@ -114,7 +113,19 @@ public class Player extends Entity {
 			}
 		}
 	}
+	
+	@Override
+	public void update(double dt) {
+		if (gsm.state instanceof Playing) {
+			if (!isInvincible) {
+				move(dt);
+				fire(dt);
+			}
+			checkCollision(dt);
+		}
+	}
 
+	@Override
 	public void render(Graphics2D g) {
 		if (!isInvincible)
 			player.paintIcon(null,g,(int)x,(int)y);

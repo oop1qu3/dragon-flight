@@ -1,4 +1,4 @@
-package game.graphics.particle;
+package game.graphic.particle;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import game.graphics.particle.shape.Circle;
-import game.graphics.particle.shape.Mesh;
-import game.graphics.particle.shape.Shape;
+import game.graphic.particle.shape.Circle;
+import game.graphic.particle.shape.Mesh;
+import game.graphic.particle.shape.Shape;
 import game.math.Range;
 import game.math.Vector2f;
 import game.util.ImageUtil;
@@ -44,6 +44,8 @@ public class ParticleSystem {
 	private Shape shape;
 	
 	// Color over lifetime
+	private float alphaSlope;
+	
 	// Size over lifetime
 	
 	// Velocity over lifetime
@@ -137,8 +139,10 @@ public class ParticleSystem {
 	private void initMesh() {
 		double lifetime = RandomUtil.nextDouble(startLifetime.start, startLifetime.end);
 		
-		//Particle p = new Particle(lifetime, origin, new Color(255, 200, 200, 100));
-		//particles.add(p);
+		float size = 1.2f;
+		Particle p = new Particle(lifetime, size, origin, new Color(255, 200, 200), 0.5f);
+		alphaSlope = (float)(1f / (p.getLifetime() * 144));
+		particles.add(p);
 	}
 	
 	public void play(double dt) {
@@ -174,14 +178,23 @@ public class ParticleSystem {
 		}
 	}
 	
+	private double timer;
 	private void updateMesh(double dt) {
 		for (int i = particles.size() - 1; i >= 0; i--) {
 			Particle p = particles.get(i);
 			
 			p.updateTimer(dt);
+			timer += dt;
 			
-			//Color color = p.getColor();
-			//p.setColor(color);
+			Color color = p.getColor();
+			p.setColor(color);
+			
+			float alpha = p.getAlphaIntensity();
+			if (timer > (p.getLifetime()/2)) {
+				alpha += alphaSlope;
+			}
+			
+			p.setAlphaIntensity(alpha);
 			
 			if (p.isLifetimeTimerOver(p.getLifetime())) {
 				particles.remove(i);
@@ -196,12 +209,18 @@ public class ParticleSystem {
 	public void render(Graphics2D g) {
 		if (initiated) {
 			for (int i = 0; i < particles.size(); i++) {
-//				if (shape instanceof Mesh) {
-//					Particle p = particles.get(i);
-//					BufferedImage newImg = ImageUtil.applyColorFilter(img, p.getColor(), 0f, 0f);
-//					//p.draw(g, newImg);
-//				}
-				particles.get(i).draw(g, img);
+				if (shape instanceof Mesh) {
+					Particle p = particles.get(i);
+					
+					float alpha = p.getAlphaIntensity();
+					BufferedImage filteredImg = ImageUtil.applyColorFilter(img, new Color(255, 145, 105), 1f, alpha);
+					p.draw(g, filteredImg);
+					p.setSize(0.5f);
+					filteredImg = ImageUtil.applyColorFilter(img, Color.WHITE, 1f, alpha);
+					p.draw(g, filteredImg);
+					p.setSize(1.2f);
+				}
+				else particles.get(i).draw(g, img);
 			}
 		}
 	}

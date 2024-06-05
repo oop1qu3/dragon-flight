@@ -30,8 +30,7 @@ public class Gameover extends State {
 	
 	private boolean REPLAY = false;
 	
-	public Gameover(GamestateManager gsm) {
-		super(gsm);
+	public Gameover() {
 		
 		background = new Background();
 		loadImg();
@@ -53,12 +52,12 @@ public class Gameover extends State {
 		background.move(dt);
 		
 		if (REPLAY == true) {
-			gsm.setState(new Playing(gsm));
+			gsm.state = new Playing();
 		}
 	}
 	
 	public void input(KeyHandler key, MouseHandler mouse) {
-		if (gsm.getState() instanceof Gameover && mouse.left.pressed == true) {
+		if (gsm.state instanceof Gameover && mouse.left.pressed == true) {
 			REPLAY = true;
 		}
 	}

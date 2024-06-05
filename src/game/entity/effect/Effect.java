@@ -1,10 +1,7 @@
 package game.entity.effect;
 
-import java.awt.Graphics2D;
+import game.entity.Entity;
 
-public abstract class Effect {
-	public abstract void play(double dt);
-	public abstract void render(Graphics2D g);
-	
+public abstract class Effect extends Entity {
 	public abstract boolean isFinished();
 }

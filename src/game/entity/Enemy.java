@@ -4,15 +4,16 @@ import static java.awt.image.ImageObserver.HEIGHT;
 import static java.lang.Math.abs;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
+import java.awt.Graphics2D;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 
 import game.entity.effect.Effect;
 import game.entity.effect.EnemyDeathEffect;
 import game.math.Vector2f;
-import game.state.State;
 import game.state.Playing;
+import game.state.State;
 
 public class Enemy extends Entity {
 
@@ -43,7 +44,7 @@ public class Enemy extends Entity {
     }
 
     public void enemyHit(){
-        ArrayList<Bullet> bullets = ((Playing)state).getBullets();
+        List<Bullet> bullets = gsm.state.getBullets();
 
         // @JW : 좌표 범위내에 들어오면
         for(int i = 0; i < bullets.size(); i++)
@@ -57,10 +58,6 @@ public class Enemy extends Entity {
     	int y = (int)(this.y + this.height / 2);
     	Effect deathEffect = new EnemyDeathEffect(new Vector2f(x, y));
     	((Playing)state).getEffects().add(deathEffect);
-    }
-
-    public void render(Graphics g) {
-        enemy.paintIcon(null, g, (int)x, (int)y);
     }
 
     public double getX(){
@@ -79,4 +76,15 @@ public class Enemy extends Entity {
     public int getHeight() {
         return this.height;
     }
+
+	@Override
+	public void update(double dt) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void render(Graphics2D g) {
+        enemy.paintIcon(null, g, (int)x, (int)y);
+	}
 }

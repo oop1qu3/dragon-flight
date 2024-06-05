@@ -1,4 +1,4 @@
-package game.graphics.particle.shape;
+package game.graphic.particle.shape;
 
 public class Circle extends Shape {
 	private float radius;

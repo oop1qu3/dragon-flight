@@ -2,9 +2,9 @@ package game.entity.effect;
 
 import java.awt.Graphics2D;
 
-import game.graphics.particle.ParticleSystem;
-import game.graphics.particle.shape.Circle;
-import game.graphics.particle.shape.Mesh;
+import game.graphic.particle.ParticleSystem;
+import game.graphic.particle.shape.Circle;
+import game.graphic.particle.shape.Mesh;
 import game.math.Vector2f;
 
 public class EnemyDeathEffect extends Effect {
@@ -24,9 +24,9 @@ public class EnemyDeathEffect extends Effect {
 	}
 	
 	private void setEnemyDeathCloud() {
-		enemyDeathCloud.setStartLifetime(0.35);
+		enemyDeathCloud.setStartLifetime(0.6);
 		enemyDeathCloud.setStartSpeed(0.15f);
-		enemyDeathCloud.setStartSize(0.3f, 1.0f);
+		enemyDeathCloud.setStartSize(0.5f, 1f);
 		enemyDeathCloud.setStartRotation(0, 360.0f);
 		
 		enemyDeathCloud.setEmission(8);
@@ -34,7 +34,7 @@ public class EnemyDeathEffect extends Effect {
 	}
 	
 	private void setEnemyDeathGlow() {
-		enemyDeathGlow.setStartLifetime(0.2);
+		enemyDeathGlow.setStartLifetime(0.45);
 		
 		enemyDeathGlow.setShape(new Mesh());
 		//enemyDeathGlow.setColorOverLifetime();
@@ -46,7 +46,7 @@ public class EnemyDeathEffect extends Effect {
 	}
 	
 	@Override
-	public void play(double dt) {
+	public void update(double dt) {
 		enemyDeathCloud.play(dt);
 		enemyDeathGlow.play(dt);
 	}

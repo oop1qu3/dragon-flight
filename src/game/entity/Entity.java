@@ -1,5 +1,10 @@
 package game.entity;
 
+import java.awt.Graphics2D;
+
+import game.state.GamestateManager;
+import game.state.State;
+
 public abstract class Entity { 
 	
 	protected double x;
@@ -11,15 +16,21 @@ public abstract class Entity {
     protected boolean left = false;
 
 	protected int hp;
+	
+	protected static GamestateManager gsm = GamestateManager.getInstance();
+	
+	public Entity() {}
 
 	public Entity(double x, double y) {
+		this();
+		
 		this.x = x;
 		this.y = y;
 	}
 
     public Entity(double x, double y, int width, int height) {
-    	this.x = x;
-    	this.y = y;
+    	this(x, y);
+    	
     	this.width = width;
     	this.height = height;
     }
@@ -33,4 +44,7 @@ public abstract class Entity {
 
 		this.hp = hp;
 	}
+	
+	public abstract void update(double dt);
+	public abstract void render(Graphics2D g);
 }

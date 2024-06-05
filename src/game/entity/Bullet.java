@@ -1,8 +1,7 @@
 package game.entity;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -56,8 +55,15 @@ public class Bullet extends Entity{
         return damage;
     }
 
-    public void render(Graphics g) {
+    @Override
+    public void render(Graphics2D g) {
         // @YCW: x should be always equal to x position of player
         g.drawImage(this.bulletImg, (int)x, (int)y, width, height, null);
     }
+
+	@Override
+	public void update(double dt) {
+		
+	}
+
 }

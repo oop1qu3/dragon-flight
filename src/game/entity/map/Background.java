@@ -9,9 +9,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import game.entity.Entity;
 import game.main.GamePanel;
+import game.state.State;
 
-public class Background {
+public class Background extends Entity {
 
 	private BufferedImage img;
 	
@@ -23,6 +25,8 @@ public class Background {
 	private double y = 0;
 
 	public Background() {
+		super();
+		
 		try {
 			img = ImageIO.read(new File("image/backgroundMap.png"));
 		} catch (IOException e) {
@@ -33,9 +37,17 @@ public class Background {
 
 	public void move(double dt) {
 		y += speed * dt;
-		y = y % height;
+		if (y >= height) {
+			y = 0;
+		}
 	}
 
+	@Override
+	public void update(double dt) {
+		move(dt);
+	}
+	
+	@Override
 	public void render(Graphics2D g) {
 		g.drawImage(img, 0, (int)y, width, height, null);
 		g.drawImage(img, 0, -height + (int)y, width, height, null);

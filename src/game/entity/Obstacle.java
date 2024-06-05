@@ -1,14 +1,11 @@
 package game.entity;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 
-import game.state.State;
-import game.state.Playing;
-
 public class Obstacle extends Entity {
-    private State state;
 
     public static ImageIcon warning_1 = new ImageIcon("image/warning_stamp.gif");
     public static ImageIcon warning_2 = new ImageIcon("image/warning_sign_35.png");
@@ -21,27 +18,31 @@ public class Obstacle extends Entity {
 
     private boolean trackEnd = false;       // @JW : warning -> obstacle
 
-    public Obstacle(Playing state, double playerX) {
+    public Obstacle(double playerX) {
         super(playerX , 0);
         this.speed = 500;
-        this.state = state;
 
         lastTargetTime = System.currentTimeMillis();
     }
 
     public void move(double dt) {
-        Player player = ((Playing)state).getPlayer();
+        List<Player> players = gsm.state.getPlayers();
 
-        if (System.currentTimeMillis() - lastTargetTime < METEO_DELAY)
-            this.x += ((player.getX() - this.x) + 11) * 0.03; // interpolation
-        else
-            if (!trackEnd) {        // @JW : warning 딜레이가 끝나고, trackEnd가 바뀌기 직전;
-                this.x -= 23;
-                this.y = -300;
-                trackEnd = true;
+        for (Player p : players) {
+        	if (System.currentTimeMillis() - lastTargetTime < METEO_DELAY)
+                this.x += ((p.getX() - this.x) + 11) * 0.03; // interpolation
+            else {
+                if (!trackEnd) {        // @JW : warning 딜레이가 끝나고, trackEnd가 바뀌기 직전;
+                    this.x -= 23;
+                    this.y = -300;
+                    trackEnd = true;
+                }
+                else {
+                    this.y += this.speed * dt;
+                }
             }
-            else
-                this.y += this.speed * dt;
+        }
+        
     }
 
     public double getX() {
@@ -56,7 +57,13 @@ public class Obstacle extends Entity {
         return this.y + 120;
     }
 
-    public void render(Graphics g) {
+    @Override
+	public void update(double dt) {
+		move(dt);
+	}
+    
+    @Override
+    public void render(Graphics2D g) {
         if (!trackEnd)
         {
             warning_1.paintIcon(null, g, (int) x, (int) y);
@@ -65,4 +72,6 @@ public class Obstacle extends Entity {
         else
             obstacle.paintIcon(null, g, (int) x, (int) y);
     }
+
+	
 }

@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import game.entity.map.Background;
+import game.main.GamePanel;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
 
@@ -35,9 +36,7 @@ public class Intro extends State {
 	private boolean BOTTOM = false;
 	private boolean STARTPLAY = false;
 	
-	public Intro(GamestateManager gsm) {
-		super(gsm);
-		
+	public Intro() {
 		background = new Background();
 		loadImg();
 	}
@@ -63,7 +62,7 @@ public class Intro extends State {
 		}
 		
 		if (STARTPLAY == true) {
-			gsm.setState(new Playing(gsm));
+			gsm.state = new Playing();
 		}
 	}
 	
