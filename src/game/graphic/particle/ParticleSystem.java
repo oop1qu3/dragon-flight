@@ -140,7 +140,7 @@ public class ParticleSystem {
 		double lifetime = RandomUtil.nextDouble(startLifetime.start, startLifetime.end);
 		
 		float size = 1.2f;
-		Particle p = new Particle(lifetime, size, origin, new Color(255, 200, 200), 0.5f);
+		Particle p = new Particle(lifetime, size, origin, new Color(255, 200, 200), 0.4f);
 		alphaSlope = (float)(1f / (p.getLifetime() * 144));
 		particles.add(p);
 	}

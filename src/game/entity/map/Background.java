@@ -1,5 +1,7 @@
 package game.entity.map;
 
+import static game.util.Constant.PanelConstant.*;
+
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -12,20 +14,18 @@ import javax.imageio.ImageIO;
 import game.entity.Entity;
 import game.main.GamePanel;
 import game.state.State;
+import game.util.Constant.PanelConstant;
 
 public class Background extends Entity {
 
 	private BufferedImage img;
-	
-	private int width = GamePanel.width;
-	private int height = GamePanel.height;
 	
 	private int speed;
 
 	private double y = 0;
 
 	public Background() {
-		super();
+		super(0, 0, PANEL_WIDTH, PANEL_HEIGHT);
 		
 		try {
 			img = ImageIO.read(new File("image/backgroundMap.png"));

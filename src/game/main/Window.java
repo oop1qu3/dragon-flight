@@ -1,5 +1,7 @@
 package game.main;
 
+import static game.util.Constant.PanelConstant.*;
+
 import javax.swing.JFrame;
 
 public class Window extends JFrame {
@@ -20,7 +22,7 @@ public class Window extends JFrame {
 	public void addNotify() {
 		super.addNotify();
 
-		gp = new GamePanel(384, 512);
+		gp = new GamePanel(PANEL_WIDTH, PANEL_HEIGHT);
 		setContentPane(gp);
 	}
 

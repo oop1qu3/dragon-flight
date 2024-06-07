@@ -7,41 +7,56 @@ import game.state.State;
 
 public abstract class Entity { 
 	
-	protected double x;
-	protected double y;
+	protected float x;
+	protected float y;
 	protected int width;
 	protected int height;
 	
     protected boolean right = false;
     protected boolean left = false;
 
+    protected float speed;
 	protected int hp;
 	
 	protected static GamestateManager gsm = GamestateManager.getInstance();
 	
 	public Entity() {}
 
-	public Entity(double x, double y) {
+	public Entity(float x, float y) {
 		this();
 		
 		this.x = x;
 		this.y = y;
 	}
 
-    public Entity(double x, double y, int width, int height) {
+    public Entity(float x, float y, int width, int height) {
     	this(x, y);
     	
     	this.width = width;
     	this.height = height;
     }
+	
+	public float getX() {
+		return x;
+	}
 
-	// @JW : Enemy로 받아올 때
-	public Entity(double x, double y, int width, int height, int hp) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
+	public float getY() {
+		return y;
+	}
 
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+	
+	public int getHp() {
+		return hp;
+	}
+	
+	public void setHp(int hp)  {
 		this.hp = hp;
 	}
 	

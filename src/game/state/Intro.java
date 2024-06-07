@@ -62,7 +62,7 @@ public class Intro extends State {
 		}
 		
 		if (STARTPLAY == true) {
-			gsm.state = new Playing();
+			gsm.setState(new Playing());
 		}
 	}
 	

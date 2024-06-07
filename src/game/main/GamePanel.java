@@ -6,8 +6,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -15,12 +13,8 @@ import game.state.GamestateManager;
 import game.state.Intro;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
-import game.util.Timer;
 
 public class GamePanel extends JPanel implements Runnable {
-	
-	public static int width;  // FIXME
-	public static int height;  // FIXME
 
 	private Thread thread;
 	private boolean running = false;
@@ -32,13 +26,9 @@ public class GamePanel extends JPanel implements Runnable {
 	private KeyHandler key;
 	
 	private GamestateManager gsm;
-	
-	private List<Timer> timers;
 
 	public GamePanel(int width, int height) {
-		GamePanel.width = width;
-		GamePanel.height = height;
-
+		setSize(width, height);
 		setPreferredSize(new Dimension(width, height));
 		setFocusable(true);
 		requestFocus();
@@ -129,22 +119,16 @@ public class GamePanel extends JPanel implements Runnable {
 		addMouseListener(mouse);
 
 		gsm = GamestateManager.getInstance();
-		gsm.state = new Intro();
-		
-		timers = new ArrayList<Timer>();
+		gsm.setState(new Intro());
 	}
 	
 	public void initGraphics() {
-		img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
 		g = (Graphics2D) img.getGraphics();
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	}
 
 	public void update(double dt) {
-		for (Timer t : timers) {
-			t.update(dt);
-		}
-		
 		gsm.update(dt);
 	}
 
@@ -158,11 +142,11 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		// Drawing onto an off-screen image (for double buffering)
 		g.setColor(new Color(200, 255, 200));
-		g.fillRect(0, 0, width, height);
+		g.fillRect(0, 0, getWidth(), getHeight());
 		gsm.render(g);
 
 		// Displaying the off-screen image
-		g2.drawImage(img, 0, 0, width, height, null);
+		g2.drawImage(img, 0, 0, getWidth(), getHeight(), null);
 		g2.dispose();
 	}
 	

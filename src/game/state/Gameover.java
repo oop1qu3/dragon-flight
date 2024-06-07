@@ -52,12 +52,12 @@ public class Gameover extends State {
 		background.move(dt);
 		
 		if (REPLAY == true) {
-			gsm.state = new Playing();
+			gsm.setState(new Playing());
 		}
 	}
 	
 	public void input(KeyHandler key, MouseHandler mouse) {
-		if (gsm.state instanceof Gameover && mouse.left.pressed == true) {
+		if (gsm.getState() instanceof Gameover && mouse.left.pressed == true) {
 			REPLAY = true;
 		}
 	}

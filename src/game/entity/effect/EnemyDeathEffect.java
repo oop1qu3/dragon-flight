@@ -24,7 +24,7 @@ public class EnemyDeathEffect extends Effect {
 	}
 	
 	private void setEnemyDeathCloud() {
-		enemyDeathCloud.setStartLifetime(0.6);
+		enemyDeathCloud.setStartLifetime(0.45);
 		enemyDeathCloud.setStartSpeed(0.15f);
 		enemyDeathCloud.setStartSize(0.5f, 1f);
 		enemyDeathCloud.setStartRotation(0, 360.0f);
@@ -34,7 +34,7 @@ public class EnemyDeathEffect extends Effect {
 	}
 	
 	private void setEnemyDeathGlow() {
-		enemyDeathGlow.setStartLifetime(0.45);
+		enemyDeathGlow.setStartLifetime(0.25);
 		
 		enemyDeathGlow.setShape(new Mesh());
 		//enemyDeathGlow.setColorOverLifetime();

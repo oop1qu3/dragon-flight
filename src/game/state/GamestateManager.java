@@ -1,14 +1,17 @@
 package game.state;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import game.util.KeyHandler;
 import game.util.MouseHandler;
+import game.util.Timer;
 
 public class GamestateManager {
 
 	private static GamestateManager gsm;
-	public State state;
+	private State state;
 	
 	private GamestateManager() {}
 	
@@ -31,5 +34,12 @@ public class GamestateManager {
 		state.render(g);
 	}
 
-	// PR test
+	public State getState() {
+		return state;
+	}
+	
+	public void setState(State state) {
+		this.state = state;
+	}
+	
 }

@@ -7,22 +7,17 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
-import game.state.GamestateManager;
 import game.state.Playing;
-import game.state.State;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
+import game.util.Timer;
 
 public class Player extends Entity {
 
 	public static ImageIcon player = new ImageIcon("image/player.png");
 	public static ImageIcon player_inv = new ImageIcon("image/player_inv.gif");
-	
-	private int hp;
-	private int speed;
 
-	private double firePeriod = 0.08; // 80ms
-	private double elapsed = 0;
+	private Timer fireTimer = new Timer(0.08, this);
 
 	private int invincibleTime = 1; // @YCW: current invincible time is 2 seconds, enemy에게 맞으면 발동
 	private double elapsedInvincibleTime = 0;
@@ -31,8 +26,22 @@ public class Player extends Entity {
 
 	public Player() {
 		super((384 - 80) / 2, 512 - 100, 50, 50); // FIXME @YDH : 상수 선언
-		this.hp = 2; // @YCW: default hp value = 2
+		this.hp = 3;
 		this.speed = 500;
+	}
+	
+	@Override
+	public void update(double dt) {
+		if (gsm.getState() instanceof Playing) {
+			if (!isInvincible) {
+				move(dt);
+				if (fireTimer.isOver()) {
+					fire();
+					fireTimer.reset();
+				}
+			}
+			checkCollision(dt);
+		}
 	}
 
 	public void move(double dt) {
@@ -45,14 +54,9 @@ public class Player extends Entity {
 	}
 	
 	
-	public void fire(double dt) {
-		elapsed += dt;
-		if (elapsed > firePeriod) {
-			Bullet b = new Bullet((int) x);
-			gsm.state.getBullets().add(b);
-
-			elapsed = 0;
-		}
+	public void fire() {
+		Bullet b = new Bullet((int) x);
+		gsm.getState().getBullets().add(b);
 	}
 
 	public void input(KeyHandler key, MouseHandler mouse) {
@@ -75,8 +79,8 @@ public class Player extends Entity {
 
 	// @YCW: add checkColision for interaction between Character and Enemy ( + Character and Obstacle )
 	public void checkCollision(double dt) {
-		List<Enemy> enemies = gsm.state.getEnemies();
-		List<Obstacle> obstacles = gsm.state.getObstacles();
+		List<Enemy> enemies = gsm.getState().getEnemies();
+		List<Obstacle> obstacles = gsm.getState().getObstacles();
 
 		for(int i = 0; i < enemies.size(); i++) {
 			Enemy e = enemies.get(i);
@@ -113,17 +117,6 @@ public class Player extends Entity {
 			}
 		}
 	}
-	
-	@Override
-	public void update(double dt) {
-		if (gsm.state instanceof Playing) {
-			if (!isInvincible) {
-				move(dt);
-				fire(dt);
-			}
-			checkCollision(dt);
-		}
-	}
 
 	@Override
 	public void render(Graphics2D g) {
@@ -143,7 +136,7 @@ public class Player extends Entity {
 	}
 
 	// @YCW: add getX for x position of bullet
-	public double getX() {
+	public float getX() {
 		return x;
 	}
 

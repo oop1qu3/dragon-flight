@@ -1,9 +1,6 @@
 package game.state;
 
-import static game.util.Constant.EntityConstant.BACKGROUND;
-import static game.util.Constant.EntityConstant.EFFECT;
-import static game.util.Constant.EntityConstant.ENEMY;
-import static game.util.Constant.EntityConstant.PLAYER;
+import static game.util.Constant.EntityConstant.*;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -19,18 +16,14 @@ import game.entity.map.Background;
 import game.util.KeyHandler;
 import game.util.MouseHandler;
 import game.util.Timer;
+import game.util.Timer.TimerState;
 
 public class Playing extends State {
 
-	private Timer spawnEnemiesTimer;
-
-	// @JW : obstacle trigger, milliseconds.
-	private final int SPAWN_DELAY_O = 7000;
-	private long lastSpawnTime_O;
+	private Timer spawnEnemiesTimer = new Timer(2.0, this, TimerState.END);
+	private Timer spawnObstacleTimer = new Timer(7.0, this);
 
 	public Playing() {
-		
-		spawnEnemiesTimer = new Timer(3.0);
 		
 		entities = new ArrayList<>();
 		
@@ -48,38 +41,50 @@ public class Playing extends State {
 		entities.set(BACKGROUND, backgrounds);
 		entities.set(PLAYER, players);
 		entities.set(ENEMY, enemies);
-		//entities.set(BULLET, bullets);
+		entities.set(BULLET, bullets);
 		entities.set(EFFECT, effects);
-		//entities.set(OBSTACLE, obstacles);
+		entities.set(OBSTACLE, obstacles);
 		
 		backgrounds.add(new Background());
 		players.add(new Player());
+		
 	}
 
 	@Override
 	public void update(double dt) {
 		
+		super.update(dt);
+		
 		if (spawnEnemiesTimer.isOver()) {
 			spawnEnemies();
+			spawnEnemiesTimer.reset();
+		}
+		
+		if (spawnObstacleTimer.isOver()) {
+			spawnObstacle();
+			spawnObstacleTimer.reset();
 		}
 		
 		for (List<? extends Entity> entity : entities) {
 			if (entity == null) continue;
+			
 			for (int i = entity.size()-1; i >= 0; i--) {
 				entity.get(i).update(dt);
 			}
 		}
 		
-		updateBullets(dt);	
-		updateObstacle(dt);
-		
 		if(isGameover()) {
-			gsm.state = new Gameover();
+			gsm.setState(new Gameover());
 		}
 		
 	}
 	
-	// @YCW: added below function for changing state to EndState when the player is dead
+	public void spawnEnemies() {
+		for(int i = 0 ; i < 5; i++) {
+			enemies.add(new Enemy(78 * i));  // FIXME @YDH: 78 <- use Constant 
+		}
+	}
+	
 	public boolean isGameover() {
 		boolean isAllDead = true;
 		
@@ -91,43 +96,9 @@ public class Playing extends State {
 		
 		return isAllDead;
 	}
-	
-	public void spawnEnemies() {
-		int x = 0;
-		
-		for(int i = 0 ; i < 5; i++) {
-			enemies.add(new Enemy(x));
-			x += 78;
-		}
-	}
-
-	public void updateBullets(double dt) { 		
-	    for (int i = bullets.size() - 1; i >= 0; i--) {
-            Bullet b = bullets.get(i);
-            b.move(dt);
-            
-            if (b.isOut()) {
-				bullets.remove(i);
-			}
-	    }
-	}
 
 	public void spawnObstacle() {
-		lastSpawnTime_O = System.currentTimeMillis();
-
 		obstacles.add(new Obstacle(players.get(0).getX()));
-	}
-	
-	public void updateObstacle(double dt) {
-		if (System.currentTimeMillis() - lastSpawnTime_O >= SPAWN_DELAY_O) {
-
-			spawnObstacle();
-		}
-
-		for (Obstacle o : obstacles) {
-			o.move(dt);
-		}
-		
 	}
 
 	@Override
@@ -141,23 +112,11 @@ public class Playing extends State {
 	public void render(Graphics2D g) {
 		for (List<? extends Entity> entity : entities) {
 			if (entity == null) continue;
-			for (Entity e : entity) {
-				e.render(g);
+			
+			for (int i = entity.size()-1; i >= 0; i--) {
+				entity.get(i).render(g);
 			}
 		}
-
-		for (int i = bullets.size() - 1; i >= 0; i--) {
-			bullets.get(i).render(g);
-		}
-		
-		for (int i = enemies.size() - 1; i >= 0; i--) {
-			enemies.get(i).render(g);
-		}
-		
-		for (int i = obstacles.size() - 1; i >= 0; i--) {
-			obstacles.get(i).render(g);
-		}
-		
 	}
 	
 }

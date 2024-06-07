@@ -9,4 +9,5 @@ public class GameLauncher {
 	public GameLauncher() {
 		new Window();
 	}
+	
 }
