@@ -5,26 +5,26 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JPanel;
 
+import game.audio.AudioPlayer;
 import game.states.GamestateManager;
 import game.utils.KeyHandler;
 import game.utils.MouseHandler;
-import game.utils.Timer;
 
 public class GamePanel extends JPanel {
+	
+	private Game game;
 	
 	private BufferedImage img;
 	private Graphics2D g;
 
 	private KeyHandler key;
 	private MouseHandler mouse;
-	private GamestateManager gsm;
 
-	public GamePanel() {
+	public GamePanel(Game game) {
+		this.game = game;
 		init();
 
 		addKeyListener(key);
@@ -42,11 +42,10 @@ public class GamePanel extends JPanel {
 		
 		key = new KeyHandler(); 
 		mouse = new MouseHandler(); 
-		gsm = new GamestateManager();
 	}
 
 	public void update(double dt) {
-		gsm.update(dt);
+		game.getGamestateManager().update(dt);
 	}
 	
 	@Override
@@ -56,7 +55,7 @@ public class GamePanel extends JPanel {
 		// Drawing onto an off-screen image (for double buffering)
 		g.setColor(new Color(200, 255, 200));
 		g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
-		gsm.render(g);
+		game.getGamestateManager().render(g);
 
 		// Displaying the off-screen image
 		g2.drawImage(img, 0, 0, img.getWidth(), img.getHeight(), null);
@@ -69,10 +68,6 @@ public class GamePanel extends JPanel {
 
 	public KeyHandler getKey() {
 		return key;
-	}
-
-	public GamestateManager getGamestateManager() {
-		return gsm;
 	}
 	
 }

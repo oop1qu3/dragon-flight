@@ -2,7 +2,7 @@ package game.states;
 
 import java.awt.Graphics2D;
 
-import game.GameObject;
+import game.main.GameObject;
 
 public abstract class State extends GameObject {
 	

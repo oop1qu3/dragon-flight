@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import game.audio.AudioPlayer;
 import game.entities.Bullet;
 import game.entities.Enemy;
 import game.entities.Entity;
@@ -106,6 +107,7 @@ public class Playing extends State {
 		}
 		
 		if (isGameover()) {
+			game.getAudioPlayer().playSong(AudioPlayer.MENU);
 			gsm.setState(game.getGameover());
 		}
 		

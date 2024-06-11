@@ -6,9 +6,9 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
+import game.audio.AudioPlayer;
 import game.entities.effect.Effect;
 import game.entities.effect.EnemyDeathEffect;
-import game.entities.map.Background;
 import game.main.Game;
 import game.math.Vector2f;
 
@@ -88,11 +88,15 @@ public class Enemy extends Entity {
     }
     
     public void die() {
+    	game.getPlaying().getEnemies().remove(this);
+    	
     	int x = (int)(this.x + this.width / 2);
     	int y = (int)(this.y + this.height / 2);
+    	
     	Effect deathEffect = new EnemyDeathEffect(new Vector2f(x, y));
     	game.getPlaying().getEffects().add(deathEffect);
-    	game.getPlaying().getEnemies().remove(this);
+    	
+    	game.getAudioPlayer().playEffect(AudioPlayer.ENEMY_DEATH);
     }
     
 	public Rectangle2D.Float getHitbox() {

@@ -4,11 +4,10 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import game.entities.Player;
+import game.audio.AudioPlayer;
 import game.entities.map.Background;
 
 public class Intro extends State {
@@ -62,6 +61,7 @@ public class Intro extends State {
 			
 			playing.reset();
 			playing.start();
+			game.getAudioPlayer().playSong(AudioPlayer.PLAYING);
 			gsm.setState(playing);
 		}
 	}
@@ -70,7 +70,7 @@ public class Intro extends State {
 	public void render(Graphics2D g) {
 		background.render(g);
 		
-		g.drawImage(illustImg, -20, (int)illustImgY, 400, 500, null);
+		g.drawImage(illustImg, 12, (int)illustImgY, illustImg.getWidth(), illustImg.getHeight(), null);
 		g.drawImage(logoImg, 40, -5, 300, 200, null);
 		g.drawImage(introPhraseImg, 50, 350, 300, 220, null);
 	}

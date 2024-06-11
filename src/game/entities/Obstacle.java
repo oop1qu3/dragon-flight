@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import game.audio.AudioPlayer;
 import game.main.Game;
 import game.utils.Timer;
 
@@ -37,6 +38,7 @@ public class Obstacle extends Entity {
     private boolean tracking;  // @JW : warning -> obstacle
 
     private Timer blinkTimer;
+    private boolean sirenSounded;
     private boolean blinking;
     
     private static float startMoveSpeed = 300.0f;
@@ -57,6 +59,7 @@ public class Obstacle extends Entity {
         tracking = true;
 
         blinkTimer = new Timer(startBlinkTime);
+        sirenSounded = false;
         blinking = false;
         
         game.getPlaying().getTimers().add(trackTimer);
@@ -79,10 +82,18 @@ public class Obstacle extends Entity {
         		blinking = true;
             }
     	} else if (blinking) {
+    		if (!sirenSounded) {
+        		if (blinkTimer.getCount() >= 2) {
+        			game.getAudioPlayer().playEffect(AudioPlayer.SIREN);
+        			sirenSounded = true;
+        		}
+    		}
     		if (blinkTimer.getCount() >= 4) {
         		x = centerX - width / 2;
                 y = -height;
-                
+    			
+    			game.getAudioPlayer().playEffect(AudioPlayer.FIREBALL);
+    			
     			blinkTimer.reset();
     			blinking = false;
     		}
@@ -111,7 +122,7 @@ public class Obstacle extends Entity {
         } 
 
     	if (Math.abs(dx) < threshold) {
-            velocity *= 0.98;
+            velocity *= 0.95f;
         }
     	
     	centerX += velocity * dt;

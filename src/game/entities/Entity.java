@@ -6,7 +6,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import game.GameObject;
+import game.main.GameObject;
 
 public abstract class Entity extends GameObject { 
 	

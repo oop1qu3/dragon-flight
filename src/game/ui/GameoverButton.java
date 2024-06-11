@@ -8,7 +8,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import game.GameObject;
+import game.audio.AudioPlayer;
+import game.main.GameObject;
 import game.states.Playing;
 
 public class GameoverButton extends GameObject {
@@ -64,6 +65,7 @@ public class GameoverButton extends GameObject {
 					
 					playing.reset();
 					playing.start();
+					game.getAudioPlayer().playSong(AudioPlayer.PLAYING);
 					gsm.setState(playing);
 					
 					buttonPressed = false;

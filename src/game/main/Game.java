@@ -1,7 +1,10 @@
 package game.main;
 
-import game.GameObject;
+import javax.sound.sampled.AudioPermission;
+
+import game.audio.AudioPlayer;
 import game.states.Gameover;
+import game.states.GamestateManager;
 import game.states.Intro;
 import game.states.Playing;
 
@@ -16,25 +19,35 @@ public class Game implements Runnable {
 	public static final int FPS_SET = 144;
 	public static final int UPS_SET = 200;
 	
+	private GamestateManager gsm;
+	
 	private Intro intro;
 	private Playing playing;
 	private Gameover gameover;
+
+	private AudioPlayer audioPlayer;
 	
 	public Game() {
-		gamePanel = new GamePanel();
+		gamePanel = new GamePanel(this);
 		new GameWindow(gamePanel);
+
+		gsm = new GamestateManager();
+		audioPlayer = new AudioPlayer();
 		
+		setGame();
+		startGameLoop();
+	}
+	
+	private void setGame() {
 		GameObject.setGame(this);
 		
 		intro = new Intro();
 		playing = new Playing();
 		gameover = new Gameover();
-		
-		startGameLoop();
 	}
 
 	private void startGameLoop() {
-		getGamePanel().getGamestateManager().setState(intro);
+		gsm.setState(intro);
 		
 		gameThread = new Thread(this);
 		gameThread.start();
@@ -99,6 +112,14 @@ public class Game implements Runnable {
 
 	public Gameover getGameover() {
 		return gameover;
+	}
+
+	public GamestateManager getGamestateManager() {
+		return gsm;
+	}
+
+	public AudioPlayer getAudioPlayer() {
+		return audioPlayer;
 	}
 	
 }
