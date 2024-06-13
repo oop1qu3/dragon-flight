@@ -17,6 +17,8 @@ public class Enemy extends Entity {
     public static ImageIcon enemy = new ImageIcon("images/entities/enemy_mov.gif");  // FIXME
     private static float size = 70.0f;
 
+	private int hp;
+	
     private Rectangle2D.Float hitbox;
 
     private static float startSpeed = 200.0f;
@@ -36,14 +38,10 @@ public class Enemy extends Entity {
 
     @Override
 	public void update(double dt) {
-    	
     	super.update(dt);
-		
-		hitbox.x = centerX - hitbox.width / 2;
-		hitbox.y = centerY - hitbox.height / 2;
     	
-    	List<Enemy> enemies = game.getPlaying().getEnemies();
-        List<Bullet> bullets = game.getPlaying().getBullets();
+    	List<Enemy> enemies = gsm.getPlaying().getEnemies();
+        List<Bullet> bullets = gsm.getPlaying().getBullets();
         
     	for (int i = bullets.size()-1; i >= 0; i--) {
     		Bullet b = bullets.get(i);
@@ -58,18 +56,28 @@ public class Enemy extends Entity {
     	
 		if (isOut()) {
 			enemies.remove(this);
-			return;
-		}
-		
-		if (isDead()) {
+		} else if (isDead()) {
 			die();
-			return;
 		}
-    	
 	}
+
+    private boolean isDead() {
+        return this.hp <= 0;
+    }
+
+    private boolean isOut() {
+        return this.y > Game.HEIGHT;
+    }
+    
+    private void die() {
+    	gsm.getPlaying().getEnemies().remove(this);
+    	
+    	Effect deathEffect = new EnemyDeathEffect(new Vector2f(centerX, centerY));
+    	gsm.getPlaying().getEffects().add(deathEffect);
+    }
     
     private void move(double dt) {
-        y += this.speed * dt;
+        y += speed * dt;
     }
 
 	@Override
@@ -78,27 +86,15 @@ public class Enemy extends Entity {
 		
         enemy.paintIcon(null, g, (int)x, (int)y);
 	}
+	
+	public int getHp() {
+		return hp;
+	}
+	
+	public void setHp(int hp)  {
+		this.hp = hp;
+	}
 
-    public boolean isDead() {
-        return this.hp <= 0;
-    }
-
-    public boolean isOut() {
-        return this.y > Game.HEIGHT;
-    }
-    
-    public void die() {
-    	game.getPlaying().getEnemies().remove(this);
-    	
-    	int x = (int)(this.x + this.width / 2);
-    	int y = (int)(this.y + this.height / 2);
-    	
-    	Effect deathEffect = new EnemyDeathEffect(new Vector2f(x, y));
-    	game.getPlaying().getEffects().add(deathEffect);
-    	
-    	game.getAudioPlayer().playEffect(AudioPlayer.ENEMY_DEATH);
-    }
-    
 	public Rectangle2D.Float getHitbox() {
 		return hitbox;
 	}

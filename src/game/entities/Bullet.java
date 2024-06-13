@@ -48,28 +48,7 @@ public class Bullet extends Entity {
         		centerX - hitboxWidth / 2, centerY - hitboxHeight / 2, hitboxWidth, hitboxHeight);
         hitboxs.add(hitbox);
     };
-
-    public void move(double dt) {
-        y -= this.speed * dt;
-    }
-
-    public boolean isOut() {
-        return y < -height;
-    }
-
-    public void setDamage(int damage) {
-        this.damage = damage;
-    }
     
-    public int getDamage() {
-        return damage;
-    }
-    
-    public void hit(Enemy e) {
-    	int currentHp = e.getHp();
-    	e.setHp(currentHp - damage);
-    }
-
 	@Override
 	public void update(double dt) {
 		super.update(dt);
@@ -80,16 +59,27 @@ public class Bullet extends Entity {
 		move(dt);
         
         if (isOut()) {
-        	game.getPlaying().getBullets().remove(this);
+        	gsm.getPlaying().getBullets().remove(this);
 		}
 	}
 
+    private void move(double dt) {
+        y -= speed * dt;
+    }
+
+    private boolean isOut() {
+        return y < -height;
+    }
 
     @Override
     public void render(Graphics2D g) {
     	super.render(g);
     	
         g.drawImage(bullet, (int)x, (int)y, (int)width, (int)height, null);
+    }
+
+    public void hit(Enemy e) {
+    	e.setHp(e.getHp() - damage);
     }
     
 	public Rectangle2D.Float getHitbox() {

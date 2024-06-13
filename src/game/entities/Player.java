@@ -1,8 +1,5 @@
 package game.entities;
 
-import static java.lang.Math.abs;
-
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -13,6 +10,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import game.main.Game;
+import game.states.Playing;
 import game.utils.Timer;
 
 public class Player extends Entity {
@@ -34,20 +32,28 @@ public class Player extends Entity {
 	private Rectangle2D.Float bodyHitbox;
 	private Rectangle2D.Float wingHitbox;
 	
-    private boolean right;
-    private boolean left;
+    private boolean right = false;
+    private boolean left = false;
+
+	private int hp;
 
 	private Timer fireTimer;
 	private Timer invisibleTimer;
 	private Timer invincibleTimer;
 	private Timer blinkTimer;
 
-	private boolean visible;
-	private boolean invincible;
-	private boolean colliding;
+	private boolean visible = true;
+	private boolean invincible = false;
+	private boolean colliding = false;
 
 	public Player() {
-		super((Game.WIDTH - player.getWidth()) / 2, Game.HEIGHT - 100, player.getWidth(), player.getHeight());
+		super();
+		
+		width = player.getWidth();
+		height = player.getHeight();
+		x = (Game.WIDTH - width) / 2;
+		y = Game.HEIGHT - 100;
+		
 		hp = 3;
 		speed = 400.0f;
 		
@@ -55,42 +61,30 @@ public class Player extends Entity {
 		bodyHitbox = new Rectangle2D.Float(centerX - bodyWidth / 2, y, bodyWidth, height);
 		hitboxs.add(bodyHitbox);
 		
-		float wingWidth = 75.0f;
+		float wingWidth = 50.0f;
 		float wingHeight = 25.0f;
 		wingHitbox = new Rectangle2D.Float(
 				centerX - wingWidth / 2, centerY - wingHeight, wingWidth, wingHeight);
 		hitboxs.add(wingHitbox);
-		
-		right = false;
-		left = false;
 		
 		fireTimer = new Timer(0.08, e -> {fire();});
 		invisibleTimer = new Timer(2.0);
 		invincibleTimer = new Timer(2.0);
 		blinkTimer = new Timer(0.2);
 		
-		visible = true;
-		invincible = false;
-		colliding = false;
+		List<Timer> t = gsm.getPlaying().getTimers();
 		
-		game.getPlaying().getTimers().add(fireTimer);
-		game.getPlaying().getTimers().add(invisibleTimer);
-		game.getPlaying().getTimers().add(invincibleTimer);
-		game.getPlaying().getTimers().add(blinkTimer);
+		t.add(fireTimer);
+		t.add(invisibleTimer);
+		t.add(invincibleTimer);
+		t.add(blinkTimer);
 		
 		fireTimer.start();
-		
 	}
 	
 	@Override
 	public void update(double dt) {
 		super.update(dt);
-		
-		bodyHitbox.x = centerX - bodyHitbox.width / 2;
-		bodyHitbox.y = centerY - bodyHitbox.height / 2;
-
-		wingHitbox.x = centerX - wingHitbox.width / 2;
-		wingHitbox.y = centerY - wingHitbox.height / 2;
 		
 		left = key.left.isPressed();
 		right = key.right.isPressed();
@@ -141,16 +135,15 @@ public class Player extends Entity {
 		}
 	}
 	
-	
 	public void fire() {
 		Bullet b = new Bullet((int)x + player.getWidth() / 2);
-		game.getPlaying().getBullets().add(b);
+		gsm.getPlaying().getBullets().add(b);
 	}
 
 	// @YCW: add checkColision for interaction between Character and Enemy ( + Character and Obstacle )
 	public void checkCollision() {
-		List<Enemy> enemies = game.getPlaying().getEnemies();
-		List<Obstacle> obstacles = game.getPlaying().getObstacles();
+		List<Enemy> enemies = gsm.getPlaying().getEnemies();
+		List<Obstacle> obstacles = gsm.getPlaying().getObstacles();
 
 		for(int i = 0; i < enemies.size(); i++) {
 			Enemy e = enemies.get(i);

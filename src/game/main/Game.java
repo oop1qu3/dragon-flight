@@ -1,7 +1,5 @@
 package game.main;
 
-import javax.sound.sampled.AudioPermission;
-
 import game.audio.AudioPlayer;
 import game.states.Gameover;
 import game.states.GamestateManager;
@@ -9,50 +7,43 @@ import game.states.Intro;
 import game.states.Playing;
 
 public class Game implements Runnable {
-	
-	private GamePanel gamePanel;
-	private Thread gameThread;
 
 	public static final int WIDTH = 384;
 	public static final int HEIGHT = 512;
 	
-	public static final int FPS_SET = 144;
-	public static final int UPS_SET = 200;
+	private static final int FPS_SET = 144;
+	private static final int UPS_SET = 200;
+	
+	private GamePanel gamePanel;
 	
 	private GamestateManager gsm;
-	
+	private AudioPlayer audioPlayer;
+
 	private Intro intro;
 	private Playing playing;
 	private Gameover gameover;
-
-	private AudioPlayer audioPlayer;
 	
 	public Game() {
-		gamePanel = new GamePanel(this);
-		new GameWindow(gamePanel);
-
+		init();
+		new Thread(this).start();
+	}
+	
+	private void init() {
 		gsm = new GamestateManager();
 		audioPlayer = new AudioPlayer();
 		
-		setGame();
-		startGameLoop();
-	}
-	
-	private void setGame() {
-		GameObject.setGame(this);
-		
+		gamePanel = new GamePanel(this);
+		new GameWindow(gamePanel);
+
+		GameObject.set(this);
+
 		intro = new Intro();
 		playing = new Playing();
 		gameover = new Gameover();
+
+		gsm.initState(this);
 	}
 
-	private void startGameLoop() {
-		gsm.setState(intro);
-		
-		gameThread = new Thread(this);
-		gameThread.start();
-	}
-	
 	public void run() {
 		
 		double timePerFrame = 1e9 / FPS_SET;
@@ -93,13 +84,21 @@ public class Game implements Runnable {
 				System.out.println("FPS: " + frames + " | UPS: " + updates);
 				frames = 0;
 				updates = 0;
-
 			}
 		}
+		
 	}
 	
 	public GamePanel getGamePanel() {
 		return gamePanel;
+	}
+
+	public GamestateManager getGamestateManager() {
+		return gsm;
+	}
+
+	public AudioPlayer getAudioPlayer() {
+		return audioPlayer;
 	}
 	
 	public Intro getIntro() {
@@ -112,14 +111,6 @@ public class Game implements Runnable {
 
 	public Gameover getGameover() {
 		return gameover;
-	}
-
-	public GamestateManager getGamestateManager() {
-		return gsm;
-	}
-
-	public AudioPlayer getAudioPlayer() {
-		return audioPlayer;
 	}
 	
 }

@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 
 import game.audio.AudioPlayer;
 import game.main.Game;
+import game.states.Playing;
 import game.utils.Timer;
 
 public class Obstacle extends Entity {
@@ -62,9 +63,10 @@ public class Obstacle extends Entity {
         sirenSounded = false;
         blinking = false;
         
-        game.getPlaying().getTimers().add(trackTimer);
-        game.getPlaying().getTimers().add(blinkTimer);
-        game.getPlaying().getSpawnObstacleTimer().stop();
+        gsm.getPlaying().getTimers().add(trackTimer);
+        gsm.getPlaying().getTimers().add(blinkTimer);
+        
+        gsm.getPlaying().getSpawnObstacleTimer().stop();
         trackTimer.start();
     }
 
@@ -84,7 +86,7 @@ public class Obstacle extends Entity {
     	} else if (blinking) {
     		if (!sirenSounded) {
         		if (blinkTimer.getCount() >= 2) {
-        			game.getAudioPlayer().playEffect(AudioPlayer.SIREN);
+        			ap.playEffect(AudioPlayer.SIREN);
         			sirenSounded = true;
         		}
     		}
@@ -92,7 +94,7 @@ public class Obstacle extends Entity {
         		x = centerX - width / 2;
                 y = -height;
     			
-    			game.getAudioPlayer().playEffect(AudioPlayer.FIREBALL);
+    			ap.playEffect(AudioPlayer.FIREBALL);
     			
     			blinkTimer.reset();
     			blinking = false;
@@ -100,19 +102,22 @@ public class Obstacle extends Entity {
         } else {
     		hitbox.x = centerX - hitbox.width / 2;
     		hitbox.y = 165 + y;
+    		
     		move(dt);
     	}
 		
 		if (isOut()) {
-			game.getPlaying().getObstacles().remove(this);
-			game.getPlaying().getTimers().remove(trackTimer);
-			game.getPlaying().getTimers().remove(blinkTimer);
-			game.getPlaying().getSpawnObstacleTimer().start();
+			gsm.getPlaying().getObstacles().remove(this);
+			
+			gsm.getPlaying().getTimers().remove(trackTimer);
+			gsm.getPlaying().getTimers().remove(blinkTimer);
+			
+			gsm.getPlaying().getSpawnObstacleTimer().start();
 		}
 	}
 	
 	private void trackPlayer(double dt) {
-    	Player p = game.getPlaying().getPlayers().get(0);
+    	Player p = gsm.getPlaying().getPlayers().get(0);
     	
     	float dx = p.getCenterX() - centerX;
         	velocity += dx * 0.06f;  // interpolation
@@ -129,7 +134,7 @@ public class Obstacle extends Entity {
 	}
 
 	private void move(double dt) {
-    	this.y += this.speed * dt;
+    	y += speed * dt;
     }
     
     private boolean isOut() {

@@ -10,17 +10,31 @@ import javax.imageio.ImageIO;
 import game.audio.AudioPlayer;
 import game.entities.map.Background;
 
-public class Intro extends State {
+public class Intro extends Gamestate {
 	
 	private Background background;
 	
-	private BufferedImage logoImg;
-	private BufferedImage illustImg;
-	private BufferedImage introPhraseImg;
+	private static BufferedImage logoImg;
+	private static BufferedImage illustImg;
+	private static BufferedImage introPhraseImg;
+
+	private static String logoImgPath = "images/intro/logo.png";
+	private static String illustImgPath = "images/intro/illust_01.png";
+	private static String introPhraseImgPath = "images/intro/phrase.png";
 	
-	private String logoImgPath = "images/intro/logo.png";
-	private String illustImgPath = "images/intro/illust_01.png";
-	private String introPhraseImgPath = "images/intro/phrase.png";
+	static {
+		loadImg();
+	}
+	
+    private static void loadImg() {
+        try {
+            logoImg = ImageIO.read(new File(logoImgPath));
+            illustImg = ImageIO.read(new File(illustImgPath));
+            introPhraseImg = ImageIO.read(new File(introPhraseImgPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 	
 	private float illustImgTopY = -65;
 	private float illustImgBottomY = -55;
@@ -31,20 +45,14 @@ public class Intro extends State {
 	private boolean BOTTOM = false;
 	private boolean STARTPLAY = false;
 	
-	public Intro() {
+	public Intro() {}
+
+	@Override
+	public void reset() {
 		background = new Background();
-		loadImg();
+		
+		ap.playSong(AudioPlayer.MENU);
 	}
-	
-    public void loadImg() {
-        try {
-            logoImg = ImageIO.read(new File(logoImgPath));
-            illustImg = ImageIO.read(new File(illustImgPath));
-            introPhraseImg = ImageIO.read(new File(introPhraseImgPath));
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 	
     @Override
 	public void update(double dt) {
@@ -57,12 +65,10 @@ public class Intro extends State {
 		illustImgMove(dt);
 			
 		if (STARTPLAY == true) {
-			Playing playing = game.getPlaying();
+			Playing playing = gsm.getPlaying();
 			
 			playing.reset();
-			playing.start();
-			game.getAudioPlayer().playSong(AudioPlayer.PLAYING);
-			gsm.setState(playing);
+			gsm.setState(Gamestate.PLAYING);
 		}
 	}
 	

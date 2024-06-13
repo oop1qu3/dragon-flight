@@ -2,6 +2,7 @@ package game.entities.effect;
 
 import java.awt.Graphics2D;
 
+import game.audio.AudioPlayer;
 import game.graphics.particle.ParticleSystem;
 import game.graphics.particle.shape.Circle;
 import game.graphics.particle.shape.Mesh;
@@ -21,6 +22,8 @@ public class EnemyDeathEffect extends Effect {
 		
 		enemyDeathCloud.init();
 		enemyDeathGlow.init();
+		
+    	ap.playEffect(AudioPlayer.ENEMY_DEATH);
 	}
 	
 	private void setEnemyDeathCloud() {
@@ -50,7 +53,7 @@ public class EnemyDeathEffect extends Effect {
 		enemyDeathGlow.play(dt);
 		
 		if (isFinished()) {
-			game.getPlaying().getEffects().remove(this);
+			gsm.getPlaying().getEffects().remove(this);
 		}
 	}
 	

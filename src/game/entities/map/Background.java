@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 
 import game.entities.Entity;
 import game.main.Game;
+import game.states.Gameover;
 
 public class Background extends Entity {
 
@@ -45,18 +46,13 @@ public class Background extends Entity {
 	public void render(Graphics2D g) {
 		g.drawImage(img, 0, (int)y, (int)width, (int)height, null);
 		g.drawImage(img, 0, -(int)height + (int)y, (int)width, (int)height, null);
-	}
-	
-	// @YCW: added below function instead of inspecting current GameState
-	public void renderDarker(Graphics2D g) {
-		g.drawImage(img, 0, (int)y, (int)width, (int)height, null);
-		g.drawImage(img, 0, -(int)height + (int)y, (int)width, (int)height, null);
-
-		// @YCW: added below lines for making background darker in EndState
-		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f)); // Adjust alpha for darkness level
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, (int)width, (int)height);
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f)); // Reset alpha
+		
+		if (gsm.getState() instanceof Gameover) {
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f)); // Adjust alpha for darkness level
+	        g.setColor(Color.BLACK);
+	        g.fillRect(0, 0, (int)width, (int)height);
+	        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f)); // Reset alpha
+		}
 	}
 
 	public static float getStartSpeed() {

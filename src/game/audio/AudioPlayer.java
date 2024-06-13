@@ -29,7 +29,6 @@ public class AudioPlayer {
 
 	public AudioPlayer() {
 		loadSongs();
-		playSong(MENU);
 	}
 
 	private void loadSongs() {

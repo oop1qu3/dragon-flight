@@ -1,7 +1,5 @@
 package game.states;
 
-import static game.utils.Constant.EntityConstant.*;
-
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +15,7 @@ import game.entities.map.Background;
 import game.main.Game;
 import game.utils.Timer;
 
-public class Playing extends State {
+public class Playing extends Gamestate {
 	
 	private List<List<? extends Entity>> entities;
 	
@@ -36,7 +34,6 @@ public class Playing extends State {
 
 	public Playing() {
 		timers = new ArrayList<>();
-		
 		entities = new ArrayList<>();
 		
 		for (int i = 0; i < 6; i++) {
@@ -50,19 +47,16 @@ public class Playing extends State {
 		effects = new ArrayList<>();
 		obstacles = new ArrayList<>();
 		
-		entities.set(BACKGROUND, backgrounds);
-		entities.set(PLAYER, players);
-		entities.set(ENEMY, enemies);
-		entities.set(BULLET, bullets);
-		entities.set(EFFECT, effects);
-		entities.set(OBSTACLE, obstacles);
+		entities.set(Entity.BACKGROUND, backgrounds);
+		entities.set(Entity.PLAYER, players);
+		entities.set(Entity.ENEMY, enemies);
+		entities.set(Entity.BULLET, bullets);
+		entities.set(Entity.EFFECT, effects);
+		entities.set(Entity.OBSTACLE, obstacles);
 	}
 	
+	@Override
 	public void reset() {
-		for (Timer t : timers) {
-			t.reset();
-		}
-		
 		timers.clear();
 		
 		for (List<? extends Entity> entity : entities) {
@@ -70,9 +64,14 @@ public class Playing extends State {
 			
 			entity.clear();
 		}
-	}
-	
-	public void start() {
+		
+		Background.setStartSpeed(100.0f);
+		Enemy.setStartSpeed(200.0f);
+		
+		Obstacle.setStartMoveSpeed(300.0f);
+		Obstacle.setStartMaxTrackSpeed(100.0f);
+		Obstacle.setStartBlinkTime(0.5);
+
 		spawnEnemiesTimer = new Timer(4.0, 3.0, e -> {spawnEnemies();});
 		spawnObstacleTimer = new Timer(5.0, 0, e -> {spawnObstacle();});
 		speedUpTimer = new Timer(1.0, e -> {speedUp();});
@@ -87,6 +86,8 @@ public class Playing extends State {
 		
 		backgrounds.add(new Background());
 		players.add(new Player());
+
+		ap.playSong(AudioPlayer.PLAYING);
 	}
 
 	@Override
@@ -107,8 +108,7 @@ public class Playing extends State {
 		}
 		
 		if (isGameover()) {
-			game.getAudioPlayer().playSong(AudioPlayer.MENU);
-			gsm.setState(game.getGameover());
+			gsm.setState(Gamestate.GAMEOVER);
 		}
 		
 	}
@@ -128,13 +128,13 @@ public class Playing extends State {
 	public void speedUp() {
 		Background.setStartSpeed(Background.getStartSpeed() * 1.0046f);
 		Enemy.setStartSpeed(Enemy.getStartSpeed() * 1.0046f);
+		
 		Obstacle.setStartMoveSpeed(Obstacle.getStartMoveSpeed() * 1.0046f);
 		Obstacle.setStartMaxTrackSpeed(Obstacle.getStartMaxTrackSpeed() * 1.0046f);
+		Obstacle.setStartBlinkTime(Obstacle.getStartBlinkTime() * 0.9954);
 		
 		spawnEnemiesTimer.setPeriod(spawnEnemiesTimer.getPeriod() * 0.9954);
 		spawnObstacleTimer.setPeriod(spawnObstacleTimer.getPeriod() * 0.9954);
-		
-		Obstacle.setStartBlinkTime(Obstacle.getStartBlinkTime() * 0.9954);
 	}
 	
 	public boolean isGameover() {

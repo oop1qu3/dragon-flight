@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 
 import game.audio.AudioPlayer;
 import game.main.GameObject;
-import game.states.Playing;
+import game.states.Gamestate;
 
 public class GameoverButton extends GameObject {
 	
@@ -20,6 +20,21 @@ public class GameoverButton extends GameObject {
 	private static BufferedImage replayPhrase;
 	
 	private static String gameoverButtonImgPath = "images/ui/gameover_button/";
+	
+	static {
+		loadImg();
+	}
+	
+	private static void loadImg() {
+        try {
+			button = ImageIO.read(new File(gameoverButtonImgPath + "button.png"));
+			buttonEntered = ImageIO.read(new File(gameoverButtonImgPath + "button_entered.png"));
+			wings = ImageIO.read(new File(gameoverButtonImgPath + "wings.png"));
+			replayPhrase = ImageIO.read(new File(gameoverButtonImgPath + "replay_phrase.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	enum ButtonState {
 		EXITED,
@@ -33,18 +48,7 @@ public class GameoverButton extends GameObject {
 	private Rectangle bounds;
 
 	public GameoverButton() {
-
-        try {
-			button = ImageIO.read(new File(gameoverButtonImgPath + "button.png"));
-			buttonEntered = ImageIO.read(new File(gameoverButtonImgPath + "button_entered.png"));
-			wings = ImageIO.read(new File(gameoverButtonImgPath + "wings.png"));
-			replayPhrase = ImageIO.read(new File(gameoverButtonImgPath + "replay_phrase.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-        
         bounds = new Rectangle(55, 370, button.getWidth(), button.getHeight());
-        
 	}
 	
 	public void update() {
@@ -53,26 +57,15 @@ public class GameoverButton extends GameObject {
 			buttonState = ButtonState.ENTERED;
 			if (mouse.left.isPressed()) {
 				buttonPressed = true;
-			}
-		} else {
-			buttonState = ButtonState.EXITED;
-		}
-		
-		if (!mouse.left.isPressed()) {
-			if (buttonPressed) {
-				if (mouse.isIn(bounds)) {
-					Playing playing = game.getPlaying();
-					
-					playing.reset();
-					playing.start();
-					game.getAudioPlayer().playSong(AudioPlayer.PLAYING);
-					gsm.setState(playing);
-					
-					buttonPressed = false;
-				} else {
+			} else {
+				if (buttonPressed) {
+					gsm.setState(Gamestate.PLAYING);
 					buttonPressed = false;
 				}
 			}
+		} else {
+			buttonState = ButtonState.EXITED;
+			buttonPressed = false;
 		}
 		
 	}
