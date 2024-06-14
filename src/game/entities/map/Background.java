@@ -16,8 +16,6 @@ import game.states.Gameover;
 public class Background extends Entity {
 
 	private BufferedImage img;
-	
-    private static float startSpeed = 100.0f;
 
 	public Background() {
 		super(0, 0, Game.WIDTH, Game.HEIGHT);
@@ -27,7 +25,7 @@ public class Background extends Entity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		this.speed = startSpeed;
+		this.speed = 100.0f;
 	}
 
 	public void move(double dt) {
@@ -55,12 +53,12 @@ public class Background extends Entity {
 		}
 	}
 
-	public static float getStartSpeed() {
-		return startSpeed;
+	public float getSpeed() {
+		return speed;
 	}
 
-	public static void setStartSpeed(float startSpeed) {
-		Background.startSpeed = startSpeed;
+	public void setSpeed(float speed) {
+		this.speed = speed;
 	}
 
 }

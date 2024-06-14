@@ -16,7 +16,7 @@ public class RandomMethod {
 		random = ThreadLocalRandom.current();
 		
 		if (start == end) return start;
-		else return random.nextFloat(start, end);
+		else return (float)random.nextDouble(start, end);
 	}
 	
 	public static int nextInt(int start, int end) {

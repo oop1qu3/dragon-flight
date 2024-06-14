@@ -72,7 +72,6 @@ public class Playing extends Gamestate {
 			entity.clear();
 		}
 		
-		Background.setStartSpeed(100.0f);
 		Enemy.setStartSpeed(200.0f);
 		
 		Obstacle.setStartMoveSpeed(300.0f);
@@ -133,13 +132,15 @@ public class Playing extends Gamestate {
 	
 	float[][] enemyTypeProbs = {
 		{1.0f, 0, 0},
-		{3/4.0f, 1/4.0f, 0},
-		{2/4.0f, 2/4.0f, 0},
-		{1/4.0f, 3/4.0f, 0},
+		{7/8.0f, 1/8.0f, 0},
+		{5/8.0f, 3/8.0f, 0},
+		{3/8.0f, 5/8.0f, 0},
 		{2/8.0f, 5/8.0f, 1/8.0f},
 		{1/8.0f, 5/8.0f, 2/8.0f},
 		{1/8.0f, 4/8.0f, 3/8.0f},
-		{1/16.0f, 7/16.0f, 8/16.0f}
+		{1/16.0f, 7/16.0f, 8/16.0f},
+		{1/16.0f, 5/16.0f, 10/16.0f},
+		{1/16.0f, 3/16.0f, 12/16.0f}
 	};
 	
 	private void spawnEnemies() {
@@ -165,7 +166,7 @@ public class Playing extends Gamestate {
 	}
 	
 	private void speedUp() {
-		Background.setStartSpeed(Background.getStartSpeed() * 1.0046f);
+		backgrounds.get(0).setSpeed(backgrounds.get(0).getSpeed() * 1.0023f);
 		Enemy.setStartSpeed(Enemy.getStartSpeed() * 1.0046f);
 		
 		Obstacle.setStartMoveSpeed(Obstacle.getStartMoveSpeed() * 1.0046f);
@@ -177,7 +178,7 @@ public class Playing extends Gamestate {
 	}
 	
 	private void levelUp() {
-		if (level < 7) {
+		if (level < enemyTypeProbs.length - 1) {
 			level++;
 		}
 	}

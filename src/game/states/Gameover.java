@@ -40,7 +40,7 @@ public class Gameover extends Gamestate {
 
 	@Override
 	public void reset() {
-		background = new Background();
+		background = gsm.getPlaying().getBackgrounds().get(0);
 		button = new GameoverButton();
 
 		ap.playSong(AudioPlayer.MENU);
